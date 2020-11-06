@@ -60,11 +60,13 @@ def viewSimulation():
     cursor = connection.cursor()
     cursor.execute(sql_view_Query)
     records = cursor.fetchall()
-    for row in records:
-        print("Id = ", row[0], )
-        print("year = ", row[1])
-        print("co2  = ", row[2])
-    return "simulation success"
+    if (len(records) == 0):
+        return "fail"
+    simID = records[0][0]
+    year = records[0][1]
+    co2 = records[0][2]
+    return_string = "{} {} {}".format(simID, year, co2)
+    return return_string
 
 
 if __name__ == "__main__":

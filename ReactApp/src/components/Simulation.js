@@ -10,7 +10,10 @@ class Simulation extends React.Component {
             simID: -1,
             year: -1,
             co2: -1,
-            simIDFound: true,
+            simIDFound: "",
+            viewSimID: -1,
+            viewYear: -1,
+            viewCO2: -1
         }
     }
 
@@ -76,7 +79,7 @@ class Simulation extends React.Component {
     view = () => {
         console.log("view")
         var data = {
-            "simID":this.state.simID,
+            "simID":this.state.simID
         }
         fetch('http://127.0.0.1:5000/viewSimulation' , {
             headers: {
@@ -85,9 +88,21 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
-                console.log(data)
+            console.log(data)
+            if (data === "fail") {
+                this.setState({simIDFound:"false"})
+            } else {
+                var stringSplit = data.split(" ")
+                this.setState(
+                    {viewSimID: stringSplit[0],
+                    viewYear: stringSplit[1],
+                    viewCO2: stringSplit[2],
+                    simIDFound: "true"}
+                )
+            }
+
         })
         .catch((error) => {
             console.log(error)
@@ -109,6 +124,7 @@ class Simulation extends React.Component {
         .then(response => response.json())
         .then((data) => {
                 console.log(data)
+
         })
         .catch((error) => {
             console.log(error)
@@ -118,6 +134,7 @@ class Simulation extends React.Component {
         console.log(this.state.simID)
         console.log(this.state.year)
         console.log(this.state.co2)
+        console.log(this.state.viewResult)
         return (
         <div style= {{color: 'white'}}>
             <h1 style= {{color: 'white'}} >Search Your Simulations</h1>
@@ -136,14 +153,21 @@ class Simulation extends React.Component {
             
             
             <h2>View/Delete a Simulation</h2>
-            <div><label style= {{color: 'white'}}> Enter the SimulationID of the Simulation to View </label></div>
+            <div><label style= {{color: 'white'}}> Enter the SimulationID of the Simulation to View/Delete </label></div>
             <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
             <div style={{marginTop:"10px"}}>
                 <button style = {{marginRight:"10px"}} onClick={this.view}>View</button>
                 <button onClick={this.delete}>Delete</button>
             </div>
-            {this.state.simIDFound === false &&
+            {this.state.simIDFound === "false" &&
             <h3>There is no corresponding simulationID to View/Delete.</h3>
+            }
+            {this.state.simIDFound ==="true" &&
+            <div>
+            <h2>SimulationID: {this.state.viewSimID}</h2>
+            <h2>Year: {this.state.viewYear}</h2>
+            <h2>CO2 Emissions: {this.state.viewCO2}</h2>
+            </div>
             }
         </div>
         )
