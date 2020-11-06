@@ -29,14 +29,17 @@ class Simulation extends React.Component {
   
     create = () => {
         console.log("create")
+        var data = {
+            "simID":this.state.simID,
+            "year": this.state.year,
+            "co2": this.state.co2
+        }
         fetch('http://127.0.0.1:5000/createSimulation' , {
             headers: {
                 "Content-Type": "application/json"
             },
-            method: "GET"
-            // body: {
-            //     "simID": 1234
-            // }
+            method: "POST",
+            body: JSON.stringify(data)
         })
         .then(response => response.json())
         .then((data) => {
@@ -49,14 +52,67 @@ class Simulation extends React.Component {
 
     update = () => {
         console.log("update")
+        var data = {
+            "simID":this.state.simID,
+            "year": this.state.year,
+            "co2": this.state.co2
+        }
+        fetch('http://127.0.0.1:5000/updateSimulation' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+                console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 
     }
     view = () => {
         console.log("view")
+        var data = {
+            "simID":this.state.simID,
+        }
+        fetch('http://127.0.0.1:5000/viewSimulation' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+                console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     delete = () => {
         console.log("delete")
+        var data = {
+            "simID":this.state.simID,
+        }
+        fetch('http://127.0.0.1:5000/deleteSimulation' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+                console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
     render() {
         console.log(this.state.simID)

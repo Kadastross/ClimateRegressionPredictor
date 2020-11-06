@@ -22,21 +22,48 @@ CORS(app)
 @app.route('/createSimulation', methods=['GET', 'POST'])
 def createSimulation():
     print("insert completed")
-    randomi = random.randint(8, 100)
-    sql_insert_Query = "INSERT INTO Simulations (SimulationID, Year, CO2Emissions) VALUES ({}, 2022, 24)".format(randomi)
+    results = request.get_json()
+    # print(results["simID"])
+    # randomi = random.randint(8, 300)
+    sql_insert_Query = "INSERT INTO Simulations (SimulationID, Year, CO2Emissions) VALUES ({}, {}, {})".format(results["simID"], results["year"], results["co2"])
     # sql_insert_Query = "SELECT * FROM Simulations WHERE Year = 2021"
     cursor = connection.cursor()
     cursor.execute(sql_insert_Query)
     connection.commit()
-    
+    return "simulation success"
 
-    # records = cursor.fetchall()
-    # print("Total number of rows in Laptop is: ", cursor.rowcount)
-    # print("\nPrinting each laptop record")
-    # for row in records:
-    #     print("Id = ", row[0], )
-    #     print("year = ", row[1])
-    #     print("co2  = ", row[2])
+@app.route('/updateSimulation', methods=['GET', 'POST'])
+def updateSimulation():
+    print("update completed")
+    results = request.get_json()
+    sql_update_Query = "UPDATE Simulations SET Year = {}, CO2Emissions = {} WHERE SimulationID = {};".format(results["year"], results["co2"], results["simID"])
+    cursor = connection.cursor()
+    cursor.execute(sql_update_Query)
+    connection.commit()
+    return "simulation success"
+
+@app.route('/deleteSimulation', methods=['GET', 'POST'])
+def deleteSimulation():
+    print("delete completed")
+    results = request.get_json()
+    sql_delete_Query = "DELETE FROM Simulations WHERE SimulationID = {};".format(results["simID"])
+    cursor = connection.cursor()
+    cursor.execute(sql_delete_Query)
+    connection.commit()
+    return "simulation success"
+
+@app.route('/viewSimulation', methods=['GET', 'POST'])
+def viewSimulation():
+    print("view completed")
+    results = request.get_json()
+    sql_view_Query = "SELECT * FROM Simulations WHERE SimulationID = {};".format(results["simID"])
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query)
+    records = cursor.fetchall()
+    for row in records:
+        print("Id = ", row[0], )
+        print("year = ", row[1])
+        print("co2  = ", row[2])
     return "simulation success"
 
 
