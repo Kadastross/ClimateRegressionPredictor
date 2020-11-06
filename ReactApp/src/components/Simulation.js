@@ -1,5 +1,7 @@
 import React from 'react';
 import './Simulation.css'
+// import {useEffect} from "react" 
+
 
 class Simulation extends React.Component {
     constructor(props) {
@@ -24,12 +26,30 @@ class Simulation extends React.Component {
         this.setState({co2: e.target.value})
     }
 
+  
     create = () => {
         console.log("create")
+        fetch('http://127.0.0.1:5000/createSimulation' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "GET"
+            // body: {
+            //     "simID": 1234
+            // }
+        })
+        .then(response => response.json())
+        .then((data) => {
+                console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     update = () => {
         console.log("update")
+
     }
     view = () => {
         console.log("view")
@@ -73,5 +93,6 @@ class Simulation extends React.Component {
         )
     }
 }
+
 
 export default Simulation;
