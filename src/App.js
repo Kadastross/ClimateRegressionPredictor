@@ -1,18 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Simulation from './components/Simulation.js'
+import './App.css'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        
-        <p>
-          CS 411 Climate Change Project
-        </p>
-        
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  render() {
+    return (
+      <div className = "Main-Background">
+        <Simulation></Simulation>
+      </div>
+    )
+  }
 }
 
 export default App;
