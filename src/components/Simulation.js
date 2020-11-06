@@ -46,12 +46,12 @@ class Simulation extends React.Component {
         <div style= {{color: 'white'}}>
             <h1 style= {{color: 'white'}} >Search Your Simulations</h1>
             <h2>Create/Update a Simulation</h2>
-            <div> <label style= {{color: 'white'}}>Enter a Simulation ID (must be a number >= 0)</label> </div>
+            <div style={{marginTop:"10px"}}> <label style= {{color: 'white'}}>Enter a Simulation ID (must be a number >= 0)</label> </div>
             <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
 
-            <div> <label style= {{color: 'white'}}>Year</label> </div>
+            <div style={{marginTop:"10px"}}> <label style= {{color: 'white'}}>Year</label> </div>
             <div style={{marginTop:"10px"}}><input name="year" value={this.state.year} onChange={this.changeYear} type="number" /> </div>
-            <div><label style= {{color: 'white'}}>CO2 Emissions</label></div>
+            <div style={{marginTop:"10px"}}><label style= {{color: 'white'}}>CO2 Emissions</label></div>
             <div style={{marginTop:"10px"}}><input name="co2" value={this.state.co2} onChange={this.changeCo2} type="number" /> </div>
             <div style={{marginTop:"10px"}}>
                 <button style={{marginRight:"10px"}} onClick={this.create}>Create</button>
