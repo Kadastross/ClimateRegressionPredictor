@@ -26,3 +26,4 @@ with open('co2_emissions.csv') as co2_data:
         print("AnnualCO2EmissionsPerCapita:", float(row[8]) * 1000000000000) # tons
         cursor.execute('INSERT INTO CO2_Emissions(Country, Year, AnnualCO2Emissions, AnnualCO2EmissionsPerCapita)' \
                        'VALUES("%s", "%s", "%s", "%s")', (row[0], int(row[1]), float(row[2]), float(row[8])))
+        db.commit()
