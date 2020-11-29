@@ -11,5 +11,5 @@ db = mysql.connector.connect(host = dbIP,
 
 cursor = db.cursor()
 cursor.execute("USE sql9379139;")
-cursor.execute("CREATE TABLE Simulations (SimulationID INT PRIMARY KEY, Year INT, CO2Emissions REAL)")
+cursor.execute("CREATE TABLE Simulations (SimulationID INT PRIMARY KEY, Year INT, UserID VARCHAR(30), CO2Emissions REAL)")
 cursor.execute("CREATE TABLE User (UserID VARCHAR(30) PRIMARY KEY, Password VARCHAR(30))")
