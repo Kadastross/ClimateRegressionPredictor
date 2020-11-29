@@ -10,7 +10,7 @@ class LogIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+
         }
     }
 
@@ -23,14 +23,14 @@ class LogIn extends React.Component {
                         <Card.Text>
                             <Form>
                                 <Form.Label>User ID</Form.Label>
-                                <Form.Control type="number" placeholder = "Enter UserID" />
+                                <Form.Control type="username" placeholder = "Enter UserID" />
                                 <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" />
                                 <Link to={ROUTES.SIMULATIONS}>
                                     <Button to={ROUTES.SIMULATIONS} style={{marginTop:"20px"}} variant="primary" type="login">LogIn</Button>
                                 </Link>
                                 <Form.Text style={{marginTop:"20px"}} >
-                                    <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link> 
+                                    <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link>
                                 </Form.Text>
                             </Form>
                         </Card.Text>
@@ -40,7 +40,7 @@ class LogIn extends React.Component {
         )
     }
 
- 
+
 }
 
 

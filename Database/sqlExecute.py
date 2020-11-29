@@ -1,4 +1,4 @@
-import mysql.connector 
+import mysql.connector
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for
 import random
@@ -76,12 +76,13 @@ def createUser():
     print("create User Complete")
     results = request.get_json()
     print(results)
-    sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES ({}, {})".format(int(results["userID"]), results["password"])
+    #'INSERT INTO CO2_Emissions(Country, Year, AnnualCO2Emissions, AnnualCO2EmissionsPerCapita)' \
+    #               'VALUES("%s", "%s", "%s", "%s")', (row[0], int(row[1]), float(row[2]), float(row[8]))
+    sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES (%s, %s)"
     cursor = connection.cursor()
-    cursor.execute(sql_insert_Query)
+    cursor.execute(sql_insert_Query, (results["userID"], results["password"]))
     connection.commit()
     return "create user success"
 
 if __name__ == "__main__":
     app.run()
-

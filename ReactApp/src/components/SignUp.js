@@ -13,7 +13,7 @@ class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            userID: -1,
+            userID: "",
             password:""
         }
     }
@@ -57,7 +57,7 @@ class SignUp extends React.Component {
                         <Card.Text>
                             <Form>
                                 <Form.Label>Enter a User ID</Form.Label>
-                                <Form.Control type="number" placeholder = "Enter UserID" value={this.state.userID} onChange={this.changeUserID} />
+                                <Form.Control type="username" placeholder = "Enter UserID" value={this.state.userID} onChange={this.changeUserID} />
                                 <Form.Label style={{marginTop:"20px"}}>Enter Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" value={this.state.password} onChange={this.changePassword}/>
                                 <Link to={ROUTES.SIMULATIONS}>
@@ -71,7 +71,7 @@ class SignUp extends React.Component {
         )
     }
 
- 
+
 }
 
 
