@@ -1,5 +1,4 @@
 import React from 'react';
-import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 

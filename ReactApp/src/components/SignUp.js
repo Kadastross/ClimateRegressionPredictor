@@ -1,5 +1,4 @@
 import React from 'react';
-import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
