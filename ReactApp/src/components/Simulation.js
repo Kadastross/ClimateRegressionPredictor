@@ -1,6 +1,11 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import './Simulation.css'
+import {Link, withRouter } from 'react-router-dom'
+import * as ROUTES from './Routes.js'
 
 
 class Simulation extends React.Component {
@@ -136,15 +141,34 @@ class Simulation extends React.Component {
         console.log(this.state.co2)
         console.log(this.state.viewResult)
         return (
-        <div style= {{color: 'white'}}>
-            <h1 style= {{color: 'white'}} >Search Your Simulations</h1>
+        <div>
+            <h1 className ="Sim-Header" style={{color:'white'}}> Welcome user123</h1>
+            <Card style={{width: '25rem' }}>
+                    <Card.Body>
+                        <Card.Title>Create a Simulation</Card.Title>
+                        <Card.Text>
+                            <Form>
+                                <Form.Label>Enter new Simulation ID (>=0)</Form.Label>
+                                <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
+                                <Form.Control type="number" placeholder = "" />
+                                <Link to={ROUTES.SIMULATIONS}>
+                                    <Button to={ROUTES.SIMULATIONS} style={{marginTop:"20px"}} variant="primary" type="login">LogIn</Button>
+                                </Link>
+                                <Form.Text style={{marginTop:"20px"}} >
+                                    <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link> 
+                                </Form.Text>
+                            </Form>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
             <h2>Create/Update a Simulation</h2>
-            <div style={{marginTop:"10px"}}> <label style= {{color: 'white'}}>Enter a Simulation ID (must be a number >= 0)</label> </div>
+            <div style={{marginTop:"10px"}}> <label>Enter a Simulation ID (must be a number >= 0)</label> </div>
             <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
 
-            <div style={{marginTop:"10px"}}> <label style= {{color: 'white'}}>Year</label> </div>
+            <div style={{marginTop:"10px"}}> <label >Year</label> </div>
             <div style={{marginTop:"10px"}}><input name="year" value={this.state.year} onChange={this.changeYear} type="number" /> </div>
-            <div style={{marginTop:"10px"}}><label style= {{color: 'white'}}>CO2 Emissions</label></div>
+            <div style={{marginTop:"10px"}}><label >CO2 Emissions</label></div>
             <div style={{marginTop:"10px"}}><input name="co2" value={this.state.co2} onChange={this.changeCo2} type="number" /> </div>
             <div style={{marginTop:"10px"}}>
                 <button style={{marginRight:"10px"}} onClick={this.create}>Create</button>
