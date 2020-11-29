@@ -22,8 +22,8 @@ class LogIn extends React.Component {
                         <Card.Title>Log In</Card.Title>
                         <Card.Text>
                             <Form>
-                                <Form.Label>User Name</Form.Label>
-                                <Form.Control type="username" placeholder = "Enter Username" />
+                                <Form.Label>User ID</Form.Label>
+                                <Form.Control type="number" placeholder = "Enter UserID" />
                                 <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" />
                                 <Link to={ROUTES.SIMULATIONS}>

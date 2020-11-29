@@ -71,6 +71,16 @@ def viewSimulation():
     return_string = "{} {} {}".format(simID, year, co2)
     return return_string
 
+@app.route('/signUp', methods=['GET', 'POST'])
+def createUser():
+    print("create User Complete")
+    results = request.get_json()
+    print(results)
+    sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES ({}, {})".format(int(results["userID"]), results["password"])
+    cursor = connection.cursor()
+    cursor.execute(sql_insert_Query)
+    connection.commit()
+    return "create user success"
 
 if __name__ == "__main__":
     app.run()
