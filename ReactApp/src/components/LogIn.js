@@ -24,9 +24,11 @@ class LogIn extends React.Component {
                             <Form>
                                 <Form.Label>User Name</Form.Label>
                                 <Form.Control type="username" placeholder = "Enter Username" />
-                                <Form.Label>Password</Form.Label>
+                                <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" />
-                                <Button style={{marginTop:"20px"}} variant="primary" type="login">Log In</Button>
+                                <Link to={ROUTES.SIMULATIONS}>
+                                    <Button to={ROUTES.SIMULATIONS} style={{marginTop:"20px"}} variant="primary" type="login">LogIn</Button>
+                                </Link>
                                 <Form.Text style={{marginTop:"20px"}} >
                                     <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link> 
                                 </Form.Text>

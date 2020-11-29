@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import {Link, withRouter } from 'react-router-dom'
+import * as ROUTES from './Routes.js'
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -22,9 +24,11 @@ class SignUp extends React.Component {
                             <Form>
                                 <Form.Label>Enter a User Name</Form.Label>
                                 <Form.Control type="username" placeholder = "Enter Username" />
-                                <Form.Label>Enter Password</Form.Label>
+                                <Form.Label style={{marginTop:"20px"}}>Enter Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" />
-                                <Button style={{marginTop:"20px"}} variant="primary" type="login">Sign Up</Button>
+                                <Link to={ROUTES.SIMULATIONS}>
+                                    <Button style={{marginTop:"20px"}} variant="primary" type="login">Sign Up</Button>
+                                </Link>
                             </Form>
                         </Card.Text>
                     </Card.Body>
