@@ -5,14 +5,17 @@ import random
 from flask_cors import CORS
 
 
-dbIP = "localhost"
-dbUser = "root"
-dbPassword = "password"
+# dbIP = "localhost"
+dbIP = "sql9.freemysqlhosting.net"
+# dbUser = "root"
+dbUser = "sql9379139"
+# dbPassword = "password"
+dbPassword = "RKBNi5PlkS"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "ClimatePredictorDatabase",
+                                    database = "sql9379139",
                                     auth_plugin = 'mysql_native_password')
 
 app = Flask(__name__)
