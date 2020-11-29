@@ -1,6 +1,7 @@
 import React from 'react';
 import './Simulation.css'
-// import {useEffect} from "react" 
+import 'bootstrap/dist/css/bootstrap.css';
+import Button from 'react-bootstrap/Button';
 
 
 class Simulation extends React.Component {
@@ -156,7 +157,7 @@ class Simulation extends React.Component {
             <div><label style= {{color: 'white'}}> Enter the SimulationID of the Simulation to View/Delete </label></div>
             <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
             <div style={{marginTop:"10px"}}>
-                <button style = {{marginRight:"10px"}} onClick={this.view}>View</button>
+                <Button variant = "primary" style = {{marginRight:"10px"}} onClick={this.view}>View</Button>
                 <button onClick={this.delete}>Delete</button>
             </div>
             {this.state.simIDFound === "false" &&
@@ -169,6 +170,7 @@ class Simulation extends React.Component {
             <h2>CO2 Emissions: {this.state.viewCO2}</h2>
             </div>
             }
+            <Button variant="primary">Primary</Button>
         </div>
         )
     }
