@@ -1,8 +1,8 @@
 import mysql.connector
 
-dbIP = "localhost"
-dbUser = "root"
-dbPassword = "password"
+dbIP = "sql9.freemysqlhosting.net"
+dbUser = "sql9379139"
+dbPassword = "RKBNi5PlkS"
 
 db = mysql.connector.connect(host = dbIP,
                                      user = dbUser,
@@ -10,7 +10,6 @@ db = mysql.connector.connect(host = dbIP,
                                      auth_plugin = 'mysql_native_password')
 
 cursor = db.cursor()
-cursor.execute("CREATE DATABASE ClimatePredictorDatabase")
-cursor.execute("USE ClimatePredictorDatabase;")
-cursor.execute("CREATE TABLE CO2_Emissions (Country VARCHAR(50), Year INT, AnnualCO2Emissions REAL, AnnualCO2EmissionsPerCapita REAL)") # only run this the first time
+cursor.execute("USE sql9379139;")
 cursor.execute("CREATE TABLE Simulations (SimulationID INT PRIMARY KEY, Year INT, CO2Emissions REAL)")
+cursor.execute("CREATE TABLE User (UserID VARCHAR(30) PRIMARY KEY, Password VARCHAR(30))")
