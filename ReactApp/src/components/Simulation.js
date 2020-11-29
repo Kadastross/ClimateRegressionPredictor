@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import CardDeck from 'react-bootstrap/CardDeck'
 import './Simulation.css'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
@@ -141,8 +142,9 @@ class Simulation extends React.Component {
         console.log(this.state.co2)
         console.log(this.state.viewResult)
         return (
-        <div>
+        <div className="Sim-Background">
             <h1 className ="Sim-Header" style={{color:'white'}}> Welcome user123</h1>
+            <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card style={{width: '25rem' }}>
                     <Card.Body>
                         <Card.Title>Create a Simulation</Card.Title>
@@ -154,7 +156,7 @@ class Simulation extends React.Component {
                                 <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
                                 <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
-                                <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.create}>Create Simulation</Button>
+                                <Button style={{marginTop:"20px"}} variant="primary" onClick={this.create}>Create Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
@@ -170,31 +172,46 @@ class Simulation extends React.Component {
                                 <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
                                 <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions</Form.Label>
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
-                                <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.create}>Update Simulation</Button>
+                                <Button style={{marginTop:"20px"}} variant="primary" onClick={this.update}>Update Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
                 </Card>
-           
-            
-            <h2>View/Delete a Simulation</h2>
-            <div><label style= {{color: 'white'}}> Enter the SimulationID of the Simulation to View/Delete </label></div>
-            <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
-            <div style={{marginTop:"10px"}}>
-                <Button variant = "primary" style = {{marginRight:"10px"}} onClick={this.view}>View</Button>
-                <button onClick={this.delete}>Delete</button>
-            </div>
-            {this.state.simIDFound === "false" &&
-            <h3>There is no corresponding simulationID to View/Delete.</h3>
-            }
-            {this.state.simIDFound ==="true" &&
-            <div>
-            <h2>SimulationID: {this.state.viewSimID}</h2>
-            <h2>Year: {this.state.viewYear}</h2>
-            <h2>CO2 Emissions: {this.state.viewCO2}</h2>
-            </div>
-            }
-            <Button variant="primary">Primary</Button>
+                <Card style={{width: '25rem' }}>
+                    <Card.Body>
+                        <Card.Title>Delete a Simulation</Card.Title>
+                        <Card.Text>
+                            <Form>
+                                <Form.Label>Enter Simulation ID to Delete</Form.Label>
+                                <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <Button style={{marginTop:"20px"}} variant="primary" onClick={this.delete}>Delete Simulation</Button>
+                            </Form>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card style={{width: '25rem' }}>
+                    <Card.Body>
+                        <Card.Title>View a Simulation</Card.Title>
+                        <Card.Text>
+                            <Form>
+                                <Form.Label>Enter Simulation ID to View</Form.Label>
+                                <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <Button style={{marginTop:"20px"}} variant="primary" onClick={this.view}>View Simulation</Button>
+                                {this.state.simIDFound === "false" &&
+                                <Form.Text>There is no corresponding simulationID to View/Delete.</Form.Text>
+                                }
+                                {this.state.simIDFound ==="true" &&
+                                <div>
+                                <Form.Text>SimulationID: {this.state.viewSimID}</Form.Text>
+                                <Form.Text>Year: {this.state.viewYear}</Form.Text>
+                                <Form.Text>CO2 Emissions: {this.state.viewCO2}</Form.Text>
+                                </div>
+                                }
+                            </Form>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                </CardDeck>
         </div>
         )
     }
