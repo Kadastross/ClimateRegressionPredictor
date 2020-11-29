@@ -144,9 +144,9 @@ class Simulation extends React.Component {
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
-            <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1>
-            <h1 className="Sim-Header" style={{color:"white"}}>Heat Map</h1>
-            <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1>
+            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
+            {/* <h1 className="Sim-Header" style={{color:"white"}}>Heat Map</h1> */}
+            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
             <HeatMap></HeatMap>
             <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1>
             <h1 className = "Sim-Header" style={{color:"white"}}>Create a Predictive Climate Simulation</h1>

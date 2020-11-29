@@ -8,6 +8,7 @@ import {
   Sphere,
   Graticule
 } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
 
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
@@ -29,6 +30,7 @@ const colorScale = scaleLinear()
     
 
     return (
+        <div>
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
@@ -44,12 +46,29 @@ const colorScale = scaleLinear()
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "2017") ;
+                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "1970") ;
                 return (
                   <Geography
                     key={geo.rsmKey}
+                    data-tip={`${
+                        geo.properties.ISO_A3
+                      } ${geo.properties.ISO_A3}`}
                     geography={geo}
+                    // data-tip={`${
+                    //     d ? d["Entity"] : "Not Recorded"
+                    //   } ${d ? d["Annual CO2 emissions"] : "Not Recorded"}`}
+                      style={{
+                        
+                        hover: {
+                            fill: "#607D8B",
+                            stroke: "#607D8B",
+                            strokeWidth: 0.75,
+                            outline: "none"
+                          }
+                        
+                      }}
                     fill={d ? colorScale(d["Annual CO2 emissions"]) : "#F5F4F6"}
+                    onClick={() => d ? console.log(d["Entity"]) : console.log("Not Recorded")}
                   />
                 );
               })
@@ -57,6 +76,8 @@ const colorScale = scaleLinear()
           </Geographies>
         )}
       </ComposableMap>
+      <ReactTooltip></ReactTooltip>
+      </div>
     );
   };
   
