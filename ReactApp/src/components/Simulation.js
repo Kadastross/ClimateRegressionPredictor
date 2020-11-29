@@ -9,7 +9,6 @@ import * as ROUTES from './Routes.js'
 
 import HeatMap from './HeatMap.js'
 
-
 class Simulation extends React.Component {
     constructor(props) {
         super(props);
