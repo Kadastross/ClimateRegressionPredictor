@@ -150,31 +150,32 @@ class Simulation extends React.Component {
                             <Form>
                                 <Form.Label>Enter new Simulation ID (>=0)</Form.Label>
                                 <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
-                                <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
-                                <Form.Control type="number" placeholder = "" />
-                                <Link to={ROUTES.SIMULATIONS}>
-                                    <Button to={ROUTES.SIMULATIONS} style={{marginTop:"20px"}} variant="primary" type="login">LogIn</Button>
-                                </Link>
-                                <Form.Text style={{marginTop:"20px"}} >
-                                    <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link> 
-                                </Form.Text>
+                                <Form.Label style={{marginTop:"20px"}}>Enter Year</Form.Label>
+                                <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
+                                <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
+                                <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
+                                <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.create}>Create Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
                 </Card>
-            <h2>Create/Update a Simulation</h2>
-            <div style={{marginTop:"10px"}}> <label>Enter a Simulation ID (must be a number >= 0)</label> </div>
-            <div style={{marginTop:"10px"}}><input name="simID" value={this.state.simID} onChange={this.changeSimId} type="number" /></div>
-
-            <div style={{marginTop:"10px"}}> <label >Year</label> </div>
-            <div style={{marginTop:"10px"}}><input name="year" value={this.state.year} onChange={this.changeYear} type="number" /> </div>
-            <div style={{marginTop:"10px"}}><label >CO2 Emissions</label></div>
-            <div style={{marginTop:"10px"}}><input name="co2" value={this.state.co2} onChange={this.changeCo2} type="number" /> </div>
-            <div style={{marginTop:"10px"}}>
-                <button style={{marginRight:"10px"}} onClick={this.create}>Create</button>
-                <button onClick={this.update}>Update</button>
-            </div>
-            
+                <Card style={{width: '25rem' }}>
+                    <Card.Body>
+                        <Card.Title>Update a Simulation</Card.Title>
+                        <Card.Text>
+                            <Form>
+                                <Form.Label>Enter Simulation ID to update</Form.Label>
+                                <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <Form.Label style={{marginTop:"20px"}}>Enter New Year</Form.Label>
+                                <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
+                                <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions</Form.Label>
+                                <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
+                                <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.create}>Update Simulation</Button>
+                            </Form>
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+           
             
             <h2>View/Delete a Simulation</h2>
             <div><label style= {{color: 'white'}}> Enter the SimulationID of the Simulation to View/Delete </label></div>
