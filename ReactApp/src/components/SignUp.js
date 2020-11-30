@@ -5,13 +5,47 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
+import { connect } from 'react-redux';
+import {bindActionCreators } from 'redux';
+import { ClimateChange } from '../redux/modules/ClimateChange'
 
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            userID: "",
+            password:""
         }
+    }
+
+    changeUserID = (e) => {
+        this.setState({userID: e.target.value})
+    }
+
+    changePassword = (e) => {
+        this.setState({password: e.target.value})
+    }
+
+    createUser = () => {
+        console.log("create user")
+        var data = {
+            "userID":this.state.userID,
+            "password": this.state.password
+        }
+        fetch('http://127.0.0.1:5000/signUp' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+                console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     render() {
@@ -22,12 +56,12 @@ class SignUp extends React.Component {
                         <Card.Title>Sign Up</Card.Title>
                         <Card.Text>
                             <Form>
-                                <Form.Label>Enter a User Name</Form.Label>
-                                <Form.Control type="username" placeholder = "Enter Username" />
+                                <Form.Label>Enter a User ID</Form.Label>
+                                <Form.Control type="username" placeholder = "Enter UserID" value={this.state.userID} onChange={this.changeUserID} />
                                 <Form.Label style={{marginTop:"20px"}}>Enter Password</Form.Label>
-                                <Form.Control type="password" placeholder = "Enter Password" />
+                                <Form.Control type="password" placeholder = "Enter Password" value={this.state.password} onChange={this.changePassword}/>
                                 <Link to={ROUTES.SIMULATIONS}>
-                                    <Button style={{marginTop:"20px"}} variant="primary" type="login">Sign Up</Button>
+                                    <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.createUser}>Sign Up</Button>
                                 </Link>
                             </Form>
                         </Card.Text>
@@ -37,7 +71,7 @@ class SignUp extends React.Component {
         )
     }
 
- 
+
 }
 
 

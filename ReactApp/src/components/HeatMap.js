@@ -17,7 +17,7 @@ const colorScale = scaleLinear()
   .domain([0, 10000])
   .range(["#ffcccc", "#ff0000"]);
 
-  const HeatMap = () => {
+  const HeatMap = (props) => {
     const [data, setData] = useState([]);
   
     useEffect(() => {
@@ -28,7 +28,6 @@ const colorScale = scaleLinear()
 
     console.log(data);
     
-
     return (
         <div>
       <ComposableMap
@@ -51,33 +50,32 @@ const colorScale = scaleLinear()
                   <Geography
                     key={geo.rsmKey}
                     data-tip={`${
-                        geo.properties.ISO_A3
-                      } ${geo.properties.ISO_A3}`}
-                    geography={geo}
-                    // data-tip={`${
-                    //     d ? d["Entity"] : "Not Recorded"
-                    //   } ${d ? d["Annual CO2 emissions"] : "Not Recorded"}`}
+                        d ? d["Entity"] : "Not Recorded"
+                      } ${d ? Number(d["Annual CO2 emissions"]).toFixed(2) : "Not Recorded"}`}
                       style={{
-                        
                         hover: {
                             fill: "#607D8B",
                             stroke: "#607D8B",
                             strokeWidth: 0.75,
                             outline: "none"
                           }
-                        
                       }}
+                    geography={geo}
+                    
+                      
                     fill={d ? colorScale(d["Annual CO2 emissions"]) : "#F5F4F6"}
                     onClick={() => d ? console.log(d["Entity"]) : console.log("Not Recorded")}
                   />
                 );
               })
             }
-          </Geographies>
-        )}
-      </ComposableMap>
-      <ReactTooltip></ReactTooltip>
-      </div>
+            </Geographies>
+            )}
+        </ComposableMap>
+        <ReactTooltip />
+        
+    </div>
+      
     );
   };
   
