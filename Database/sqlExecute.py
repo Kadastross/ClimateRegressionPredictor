@@ -3,21 +3,28 @@ from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for
 import random
 from flask_cors import CORS
-from flask import jsonify
 
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
 # dbUser = "root"
-dbUser = "sql9379184"
+dbUser = "sql9379233"
 # dbPassword = "password"
-dbPassword = "VpNfwUsaws"
+dbPassword = "A5ffw6NIeU"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379184",
+                                    database = "sql9379233",
                                     auth_plugin = 'mysql_native_password')
+
+countries = []
+
+with open('annual-co2-emissions-per-country.csv') as co2_data:
+    csv_reader = csv.reader(co2_data, delimiter=',')
+    next(csv_reader)
+    for row in csv_reader:
+        countries.append(row[0])
 
 def exit_handler():
     connection.close()
@@ -34,11 +41,12 @@ userID = ""
 def createSimulation():
     print("insert completed")
     results = request.get_json()
-    sql_insert_Query = "INSERT INTO Simulation (SimulationName, Year, CO2Emissions, UserID, Country) VALUES (%s, %s, %s, %s, %s)" 
+    # print(results["simID"])
+    # randomi = random.randint(8, 300)
+    sql_insert_Query = "INSERT INTO Simulation (SimulationName, Year, CO2Emissions, UserID) VALUES (%s, %s, %s, %s)"
+    # sql_insert_Query = "SELECT * FROM Simulation WHERE Year = 2021"
     cursor = connection.cursor()
-    if (results["username"] == ""):
-        results["username"] = "mohamed"
-    cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], results["username"], results["country"]))
+    cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], "mohamed"))
     connection.commit()
     cursor.close()
     return "simulation success"
@@ -47,10 +55,9 @@ def createSimulation():
 def updateSimulation():
     print("update completed")
     results = request.get_json()
-    # sql_update_Query = "UPDATE Simulation SET Year = %s, CO2Emissions = %s , Country = %s WHERE SimulationName = %s;"
-    sql_update_Query = "UPDATE Simulation natural join User SET Simulation.Year = %s, Simulation.CO2Emissions = %s , Simulation.Country = %s WHERE Simulation.SimulationName = %s AND User.UserID = %s"
+    sql_update_Query = "UPDATE Simulation SET Year = {}, CO2Emissions = {} WHERE SimulationName = {};".format(results["year"], results["co2"], results["simID"])
     cursor = connection.cursor()
-    cursor.execute(sql_update_Query, (results["year"], results["co2"], results["country"], results["simID"], results["username"]))
+    cursor.execute(sql_update_Query)
     connection.commit()
     cursor.close()
     return "simulation success"
@@ -106,18 +113,3 @@ def logIn():
 def getUserID():
     print("USER: ", userID)
     return userID
-
-@app.route('/getCountries', methods=['GET'])
-def getCountries(): 
-    countries = set()
-
-    with open('annual-co2-emissions-per-country.csv') as co2_data:
-        csv_reader = csv.reader(co2_data, delimiter=',')
-        next(csv_reader)
-        for row in csv_reader:
-            countries.add(row[0])
-    listCountry = list(countries)
-    return jsonify(listCountry)
-
-if __name__ == "__main__":
-    app.run()
