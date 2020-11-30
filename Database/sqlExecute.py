@@ -21,6 +21,9 @@ connection = mysql.connector.connect(host = dbIP,
 app = Flask(__name__)
 CORS(app)
 
+#global variables
+userID = ""
+
 @app.route('/')
 @app.route('/createSimulation', methods=['GET', 'POST'])
 def createSimulation():
@@ -76,13 +79,23 @@ def createUser():
     print("create User Complete")
     results = request.get_json()
     print(results)
-    #'INSERT INTO CO2_Emissions(Country, Year, AnnualCO2Emissions, AnnualCO2EmissionsPerCapita)' \
-    #               'VALUES("%s", "%s", "%s", "%s")', (row[0], int(row[1]), float(row[2]), float(row[8]))
     sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES (%s, %s)"
     cursor = connection.cursor()
     cursor.execute(sql_insert_Query, (results["userID"], results["password"]))
     connection.commit()
-    return "create user success"
+    userID = results["userID"]
+    return userID
+
+@app.route('/logIn', methods=['GET', 'POST'])
+def logIn():
+    results = request.get_json()
+    userID = results["username"]
+    return userID
+
+@app.route('/getUserID', methods=['GET'])
+def getUserID():
+    print("USER: ", userID)
+    return userID
 
 if __name__ == "__main__":
     app.run()
