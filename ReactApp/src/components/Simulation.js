@@ -8,6 +8,7 @@ import './Simulation.css'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
+import LineGraph from './LineGraph.js'
 import ls from 'local-storage'
 
 class Simulation extends React.Component {
@@ -67,7 +68,9 @@ class Simulation extends React.Component {
         var data = {
             "simID":this.state.simID,
             "year": this.state.year,
-            "co2": this.state.co2
+            "co2": this.state.co2,
+            "username": this.state.userID,
+            "country": this.state.country
         }
         fetch('http://127.0.0.1:5000/createSimulation' , {
             headers: {
@@ -90,7 +93,9 @@ class Simulation extends React.Component {
         var data = {
             "simID":this.state.simID,
             "year": this.state.year,
-            "co2": this.state.co2
+            "co2": this.state.co2,
+            "username": this.state.userID,
+            "country": this.state.country
         }
         fetch('http://127.0.0.1:5000/updateSimulation' , {
             headers: {
@@ -111,7 +116,8 @@ class Simulation extends React.Component {
     view = () => {
         console.log("view")
         var data = {
-            "simID":this.state.simID
+            "simID":this.state.simID,
+            "username": this.state.userID
         }
         fetch('http://127.0.0.1:5000/viewSimulation' , {
             headers: {
@@ -145,6 +151,7 @@ class Simulation extends React.Component {
         console.log("delete")
         var data = {
             "simID":this.state.simID,
+            "username": this.state.userID
         }
         fetch('http://127.0.0.1:5000/deleteSimulation' , {
             headers: {
@@ -176,6 +183,8 @@ class Simulation extends React.Component {
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
+            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
+            <LineGraph></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>
