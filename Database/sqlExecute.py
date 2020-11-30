@@ -8,14 +8,14 @@ from flask_cors import CORS
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
 # dbUser = "root"
-dbUser = "sql9379233"
+dbUser = "sql9379236"
 # dbPassword = "password"
-dbPassword = "A5ffw6NIeU"
+dbPassword = "Ax3afA2tkU"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379233",
+                                    database = "sql9379236",
                                     auth_plugin = 'mysql_native_password')
 
 countries = []
