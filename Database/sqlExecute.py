@@ -116,7 +116,7 @@ def deleteSimulation():
 def viewSimulation():
     print("view completed")
     results = request.get_json()
-    sql_view_Query = "SELECT * FROM Simulation WHERE SimulationName = %s AND UserID = %s"
+    sql_view_Query = "SELECT * FROM Datapoints WHERE SimulationName = %s AND UserID = %s" #find all datapoints with some simulation name.
     cursor = connection.cursor()
     cursor.execute(sql_view_Query, (results["simID"], results["username"]))
     records = cursor.fetchall()

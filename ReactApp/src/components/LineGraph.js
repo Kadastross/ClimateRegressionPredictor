@@ -3,13 +3,14 @@ import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import { csv } from 'd3-fetch'
-import { VictoryLine, VictoryChart } from 'victory'
+import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter } from 'victory'
+import { color } from 'd3';
 
 const filterData = (data, country) => {
     const d = [];
     for(var i=0; i<data.length; i++){
         if (data[i]['Code'] == country) {
-            d.push(data[i]);
+            d.push({"Year": data[i]['Year'], "Emissions": data[i]['Annual CO2 emissions']*1000000});
         }
     }
     return d;
@@ -24,31 +25,60 @@ const LineGraph = () => {
     }, []);
     console.log(data)
     if (data.length > 0) {
-        var d = filterData(data, "AFG");
+        var d = filterData(data, "CHN");
         console.log(d)
     }
     return (
+        <div>
         <VictoryChart
-            style={{tickLabels: {fontSize: 12}}}
             width='900'
             height='500'
             domainPadding={50}
-            padding={{ top: 10, bottom: 40, left: 80, right: 10 }}
+            padding={{ top: 10, bottom: 40, left: 90, right: 10 }}
         >
-        {data.length > 0 && (
-            <VictoryLine 
+        {data.length > 0 &&(
+        <VictoryAxis
+            label="Year"
+            tickCount={d.length/4}
+            style={{
+                axis: {stroke: "white"},
+                axisLabel: {fill: "white"},
+                tickLabels: {fontSize: 10, angle: 45, fill: "white"},
+                grid: {
+                    stroke: "lightgrey"
+                }
+            }}
+        />)}
+        {data.length > 0 &&(
+        <VictoryAxis
+            dependentAxis={true}
+            label="CO2 Emissions (Tons)"
+            tickCount={d.length/10}
+            style={{
+                axis: {stroke: "white"},
+                axisLabel: {fill: "white", padding: 60},
+                tickLabels: {fontSize: 10, angle: -45, fill: "white"},
+                grid: {
+                    stroke: "lightgrey"
+                }
+            }}
+        />)}
+        
+        {data.length > 0 &&(
+            <VictoryScatter 
                 data={d} 
+                size={2}
                 style={{
                     data: {
-                      stroke: "#02B875"
+                      fill: "#02B875"
                     }
                   }}
                 x='Year' 
-                y='Annual CO2 emissions' 
-            />
-        )}
+                y='Emissions' 
+            />)}
         </VictoryChart>
-        )
+        </div>
+    )
 }
 
 export default LineGraph;
