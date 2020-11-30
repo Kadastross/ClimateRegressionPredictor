@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import { csv } from 'd3-fetch'
 import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter } from 'victory'
+import { color } from 'd3';
 
 const filterData = (data, country) => {
     const d = [];
@@ -28,6 +29,7 @@ const LineGraph = () => {
         console.log(d)
     }
     return (
+        <div>
         <VictoryChart
             width='900'
             height='500'
@@ -75,6 +77,7 @@ const LineGraph = () => {
                 y='Emissions' 
             />)}
         </VictoryChart>
+        </div>
     )
 }
 
