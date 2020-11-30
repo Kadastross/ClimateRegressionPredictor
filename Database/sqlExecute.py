@@ -1,4 +1,4 @@
-import mysql.connector, atexit
+import mysql.connector, atexit, csv
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for
 import random
@@ -17,6 +17,14 @@ connection = mysql.connector.connect(host = dbIP,
                                     password = dbPassword,
                                     database = "sql9379184",
                                     auth_plugin = 'mysql_native_password')
+
+countries = []
+
+with open('annual-co2-emissions-per-country.csv') as co2_data:
+    csv_reader = csv.reader(co2_data, delimiter=',')
+    next(csv_reader)
+    for row in csv_reader:
+        countries.append(row[0])
 
 def exit_handler():
     connection.close()
