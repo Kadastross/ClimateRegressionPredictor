@@ -8,6 +8,7 @@ import './Simulation.css'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
+import LineGraph from './LineGraph.js'
 import ls from 'local-storage'
 
 class Simulation extends React.Component {
@@ -176,6 +177,7 @@ class Simulation extends React.Component {
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
+            <LineGraph></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>
