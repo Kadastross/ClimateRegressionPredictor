@@ -1,4 +1,4 @@
-import mysql.connector
+import mysql.connector, atexit
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for
 import random
@@ -18,6 +18,10 @@ connection = mysql.connector.connect(host = dbIP,
                                     database = "sql9379184",
                                     auth_plugin = 'mysql_native_password')
 
+def exit_handler():
+    connection.close()
+
+atexit.register(exit_handler)
 app = Flask(__name__)
 CORS(app)
 
@@ -36,6 +40,7 @@ def createSimulation():
     cursor = connection.cursor()
     cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], "mohamed"))
     connection.commit()
+    cursor.close()
     return "simulation success"
 
 @app.route('/updateSimulation', methods=['GET', 'POST'])
@@ -46,6 +51,7 @@ def updateSimulation():
     cursor = connection.cursor()
     cursor.execute(sql_update_Query)
     connection.commit()
+    cursor.close()
     return "simulation success"
 
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
@@ -56,6 +62,7 @@ def deleteSimulation():
     cursor = connection.cursor()
     cursor.execute(sql_delete_Query)
     connection.commit()
+    cursor.close()
     return "simulation success"
 
 @app.route('/viewSimulation', methods=['GET', 'POST'])
@@ -72,6 +79,7 @@ def viewSimulation():
     year = records[0][1]
     co2 = records[0][2]
     return_string = "{} {} {}".format(simID, year, co2)
+    cursor.close()
     return return_string
 
 @app.route('/signUp', methods=['GET', 'POST'])
@@ -84,6 +92,7 @@ def createUser():
     cursor.execute(sql_insert_Query, (results["userID"], results["password"]))
     connection.commit()
     userID = results["userID"]
+    cursor.close()
     return userID
 
 @app.route('/logIn', methods=['GET', 'POST'])
