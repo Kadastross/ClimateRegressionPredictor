@@ -8,14 +8,14 @@ from flask_cors import CORS
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
 # dbUser = "root"
-dbUser = "sql9379139"
+dbUser = "sql9379184"
 # dbPassword = "password"
-dbPassword = "RKBNi5PlkS"
+dbPassword = "VpNfwUsaws"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379139",
+                                    database = "sql9379184",
                                     auth_plugin = 'mysql_native_password')
 
 app = Flask(__name__)
@@ -31,10 +31,10 @@ def createSimulation():
     results = request.get_json()
     # print(results["simID"])
     # randomi = random.randint(8, 300)
-    sql_insert_Query = "INSERT INTO Simulations (SimulationID, Year, CO2Emissions) VALUES ({}, {}, {})".format(results["simID"], results["year"], results["co2"])
-    # sql_insert_Query = "SELECT * FROM Simulations WHERE Year = 2021"
+    sql_insert_Query = "INSERT INTO Simulation (SimulationName, Year, CO2Emissions, UserID) VALUES (%s, %s, %s, %s)"
+    # sql_insert_Query = "SELECT * FROM Simulation WHERE Year = 2021"
     cursor = connection.cursor()
-    cursor.execute(sql_insert_Query)
+    cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], "mohamed"))
     connection.commit()
     return "simulation success"
 
@@ -42,7 +42,7 @@ def createSimulation():
 def updateSimulation():
     print("update completed")
     results = request.get_json()
-    sql_update_Query = "UPDATE Simulations SET Year = {}, CO2Emissions = {} WHERE SimulationID = {};".format(results["year"], results["co2"], results["simID"])
+    sql_update_Query = "UPDATE Simulation SET Year = {}, CO2Emissions = {} WHERE SimulationName = {};".format(results["year"], results["co2"], results["simID"])
     cursor = connection.cursor()
     cursor.execute(sql_update_Query)
     connection.commit()
@@ -52,7 +52,7 @@ def updateSimulation():
 def deleteSimulation():
     print("delete completed")
     results = request.get_json()
-    sql_delete_Query = "DELETE FROM Simulations WHERE SimulationID = {};".format(results["simID"])
+    sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = {};".format(results["simID"])
     cursor = connection.cursor()
     cursor.execute(sql_delete_Query)
     connection.commit()
@@ -62,7 +62,7 @@ def deleteSimulation():
 def viewSimulation():
     print("view completed")
     results = request.get_json()
-    sql_view_Query = "SELECT * FROM Simulations WHERE SimulationID = {};".format(results["simID"])
+    sql_view_Query = "SELECT * FROM Simulation WHERE SimulationName = {};".format(results["simID"])
     cursor = connection.cursor()
     cursor.execute(sql_view_Query)
     records = cursor.fetchall()

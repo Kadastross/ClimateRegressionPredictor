@@ -8,6 +8,7 @@ import {
   Sphere,
   Graticule
 } from "react-simple-maps";
+import ReactTooltip from "react-tooltip";
 
 const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
@@ -16,7 +17,7 @@ const colorScale = scaleLinear()
   .domain([0, 10000])
   .range(["#ffcccc", "#ff0000"]);
 
-  const HeatMap = () => {
+  const HeatMap = (props) => {
     const [data, setData] = useState([]);
   
     useEffect(() => {
@@ -27,13 +28,16 @@ const colorScale = scaleLinear()
 
     console.log(data);
     
-
     return (
+        <div>
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
           scale: 130
         }}
+        width={800}
+  height={400}
+  style={{ width: "100%", height: "auto" }} 
       >
         <Sphere stroke="#E4E5E6" strokeWidth={0.5} />
         <Graticule stroke="#E4E5E6" strokeWidth={0.5} />
@@ -41,19 +45,37 @@ const colorScale = scaleLinear()
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "2017") ;
+                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "1970") ;
                 return (
                   <Geography
                     key={geo.rsmKey}
+                    data-tip={`${
+                        d ? d["Entity"] : "Not Recorded"
+                      } ${d ? Number(d["Annual CO2 emissions"]).toFixed(2) : "Not Recorded"}`}
+                      style={{
+                        hover: {
+                            fill: "#607D8B",
+                            stroke: "#607D8B",
+                            strokeWidth: 0.75,
+                            outline: "none"
+                          }
+                      }}
                     geography={geo}
+                    
+                      
                     fill={d ? colorScale(d["Annual CO2 emissions"]) : "#F5F4F6"}
+                    onClick={() => d ? console.log(d["Entity"]) : console.log("Not Recorded")}
                   />
                 );
               })
             }
-          </Geographies>
-        )}
-      </ComposableMap>
+            </Geographies>
+            )}
+        </ComposableMap>
+        <ReactTooltip />
+        
+    </div>
+      
     );
   };
   

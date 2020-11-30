@@ -10,7 +10,6 @@ import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
 import ls from 'local-storage'
 
-
 class Simulation extends React.Component {
     constructor(props) {
         super(props);
@@ -155,6 +154,9 @@ class Simulation extends React.Component {
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
+            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
+            {/* <h1 className="Sim-Header" style={{color:"white"}}>Heat Map</h1> */}
+            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
