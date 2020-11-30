@@ -16,10 +16,14 @@ const geoUrl =
 const colorScale = scaleLinear()
   .domain([0, 10000])
   .range(["#ffcccc", "#ff0000"]);
-
-  const HeatMap = (props) => {
-    const [data, setData] = useState([]);
   
+  const HeatMap = (props) => {
+      
+    const [data, setData] = useState([]);
+    useEffect(() => {
+        ReactTooltip.rebuild();
+    });
+    
     useEffect(() => {
       csv('./data/annual-co2-emissions-per-country.csv').then((data) => {
         setData(data);
@@ -27,9 +31,12 @@ const colorScale = scaleLinear()
     }, []);
 
     console.log(data);
-    
+    var info = "hi";
+
     return (
         <div>
+            <h4 style={{color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
+            {/* <ReactTooltip />    */}
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
@@ -45,13 +52,16 @@ const colorScale = scaleLinear()
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "1970") ;
+                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "2017") ;
                 return (
+                    
                   <Geography
                     key={geo.rsmKey}
+
                     data-tip={`${
                         d ? d["Entity"] : "Not Recorded"
-                      } ${d ? Number(d["Annual CO2 emissions"]).toFixed(2) : "Not Recorded"}`}
+                      } ${d ? Number(d["Annual CO2 emissions"]).toFixed(2) : ""}`}
+
                       style={{
                         hover: {
                             fill: "#607D8B",
@@ -62,17 +72,20 @@ const colorScale = scaleLinear()
                       }}
                     geography={geo}
                     
-                      
                     fill={d ? colorScale(d["Annual CO2 emissions"]) : "#F5F4F6"}
-                    onClick={() => d ? console.log(d["Entity"]) : console.log("Not Recorded")}
+                    onClick={() => {
+                        info = d ? d["Entity"] : "Not Recorded";
+                        alert(d ? info + ": " + Number(d["Annual CO2 emissions"]).toFixed(2) + " million Tons of CO2": "Not Recorded");
+                    }}
                   />
+                  
                 );
+            
               })
             }
             </Geographies>
             )}
         </ComposableMap>
-        <ReactTooltip />
         
     </div>
       
