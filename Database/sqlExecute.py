@@ -66,9 +66,9 @@ def updateSimulation():
 def deleteSimulation():
     print("delete completed")
     results = request.get_json()
-    sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = {};".format(results["simID"])
+    sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_delete_Query)
+    cursor.execute(sql_delete_Query, (results["simID"], results["username"]))
     connection.commit()
     cursor.close()
     return "simulation success"
@@ -77,9 +77,9 @@ def deleteSimulation():
 def viewSimulation():
     print("view completed")
     results = request.get_json()
-    sql_view_Query = "SELECT * FROM Simulation WHERE SimulationName = {};".format(results["simID"])
+    sql_view_Query = "SELECT * FROM Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_view_Query)
+    cursor.execute(sql_view_Query, (results["simID"], results["username"]))
     records = cursor.fetchall()
     if (len(records) == 0):
         return "fail"

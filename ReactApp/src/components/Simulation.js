@@ -116,7 +116,8 @@ class Simulation extends React.Component {
     view = () => {
         console.log("view")
         var data = {
-            "simID":this.state.simID
+            "simID":this.state.simID,
+            "username": this.state.userID
         }
         fetch('http://127.0.0.1:5000/viewSimulation' , {
             headers: {
@@ -150,6 +151,7 @@ class Simulation extends React.Component {
         console.log("delete")
         var data = {
             "simID":this.state.simID,
+            "username": this.state.userID
         }
         fetch('http://127.0.0.1:5000/deleteSimulation' , {
             headers: {
