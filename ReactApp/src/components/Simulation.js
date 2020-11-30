@@ -17,6 +17,8 @@ class Simulation extends React.Component {
             simID: -1,
             year: -1,
             co2: -1,
+            country:"",
+            countryData: [],
             simIDFound: "",
             viewSimID: -1,
             viewYear: -1,
@@ -28,6 +30,20 @@ class Simulation extends React.Component {
     componentDidMount = () => {
         let username = ls.get('username')
         this.setState({userID: username})
+    
+        fetch('http://127.0.0.1:5000/getCountries' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "GET",
+        })
+        .then(response => response.json())
+        .then((data) => {
+            this.setState({countryData: data})
+        })
+        .catch((error) => {
+            console.log(error)
+        })
     }
 
     changeSimId = (e) => {
@@ -42,7 +58,10 @@ class Simulation extends React.Component {
         this.setState({co2: e.target.value})
     }
 
-  
+    changeCountry = (e) => {
+        this.setState({country: e.target.value})
+    }
+
     create = () => {
         console.log("create")
         var data = {
@@ -150,13 +169,11 @@ class Simulation extends React.Component {
         console.log(this.state.co2)
         console.log(this.state.viewResult)
         console.log(this.state.userID)
+        console.log(this.state.country)
 
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
-            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
-            {/* <h1 className="Sim-Header" style={{color:"white"}}>Heat Map</h1> */}
-            {/* <h1 className ="Sim-Header" style={{color:'white'}}> _____________________________________________________________________________________</h1> */}
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
@@ -166,8 +183,16 @@ class Simulation extends React.Component {
                         <Card.Title>Create a Simulation</Card.Title>
                         <Card.Text>
                             <Form>
-                                <Form.Label>Enter new Simulation ID (>=0)</Form.Label>
+                                <Form.Label>Enter new Simulation Name</Form.Label>
                                 <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.country} onChange={this.changeCountry}>
+                                    <option>Select Country</option>
+                                    {this.state.countryData.map(country => {
+                                        return (
+                                            <option value = {country}> {country} </option>
+                                        )
+                                        })}
+                                </select>
                                 <Form.Label style={{marginTop:"20px"}}>Enter Year</Form.Label>
                                 <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
                                 <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
@@ -182,8 +207,16 @@ class Simulation extends React.Component {
                         <Card.Title>Update a Simulation</Card.Title>
                         <Card.Text>
                             <Form>
-                                <Form.Label>Enter Simulation ID to update</Form.Label>
+                                <Form.Label>Enter Simulation Name to update</Form.Label>
                                 <Form.Control type="number" placeholder = "Sim ID" value={this.state.simID} onChange={this.changeSimId} />
+                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.country} onChange={this.changeCountry}>
+                                    <option>Select Country</option>
+                                    {this.state.countryData.map(country => {
+                                        return (
+                                            <option value = {country}> {country} </option>
+                                        )
+                                        })}
+                                </select>
                                 <Form.Label style={{marginTop:"20px"}}>Enter New Year</Form.Label>
                                 <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
                                 <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions</Form.Label>

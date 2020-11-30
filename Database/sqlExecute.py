@@ -3,6 +3,7 @@ from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for
 import random
 from flask_cors import CORS
+from flask import jsonify
 
 
 # dbIP = "localhost"
@@ -17,14 +18,6 @@ connection = mysql.connector.connect(host = dbIP,
                                     password = dbPassword,
                                     database = "sql9379184",
                                     auth_plugin = 'mysql_native_password')
-
-countries = []
-
-with open('annual-co2-emissions-per-country.csv') as co2_data:
-    csv_reader = csv.reader(co2_data, delimiter=',')
-    next(csv_reader)
-    for row in csv_reader:
-        countries.append(row[0])
 
 def exit_handler():
     connection.close()
@@ -113,6 +106,18 @@ def logIn():
 def getUserID():
     print("USER: ", userID)
     return userID
+
+@app.route('/getCountries', methods=['GET'])
+def getCountries(): 
+    countries = set()
+
+    with open('annual-co2-emissions-per-country.csv') as co2_data:
+        csv_reader = csv.reader(co2_data, delimiter=',')
+        next(csv_reader)
+        for row in csv_reader:
+            countries.add(row[0])
+    listCountry = list(countries)
+    return jsonify(listCountry)
 
 if __name__ == "__main__":
     app.run()
