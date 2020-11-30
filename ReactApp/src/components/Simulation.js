@@ -8,6 +8,7 @@ import './Simulation.css'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
+import ls from 'local-storage'
 
 class Simulation extends React.Component {
     constructor(props) {
@@ -19,8 +20,14 @@ class Simulation extends React.Component {
             simIDFound: "",
             viewSimID: -1,
             viewYear: -1,
-            viewCO2: -1
+            viewCO2: -1,
+            userID: ""
         }
+    }
+
+    componentDidMount = () => {
+        let username = ls.get('username')
+        this.setState({userID: username})
     }
 
     changeSimId = (e) => {
@@ -136,11 +143,14 @@ class Simulation extends React.Component {
             console.log(error)
         })
     }
+
     render() {
         console.log(this.state.simID)
         console.log(this.state.year)
         console.log(this.state.co2)
         console.log(this.state.viewResult)
+        console.log(this.state.userID)
+
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>

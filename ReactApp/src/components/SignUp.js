@@ -5,9 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
-import { connect } from 'react-redux';
-import {bindActionCreators } from 'redux';
-import { ClimateChange } from '../redux/modules/ClimateChange'
+import ls from 'local-storage'
 
 class SignUp extends React.Component {
     constructor(props) {
@@ -18,8 +16,10 @@ class SignUp extends React.Component {
         }
     }
 
+
     changeUserID = (e) => {
         this.setState({userID: e.target.value})
+        ls.set('username', e.target.value)
     }
 
     changePassword = (e) => {
@@ -39,7 +39,7 @@ class SignUp extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
                 console.log(data)
         })
