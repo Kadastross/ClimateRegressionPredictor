@@ -34,12 +34,14 @@ with open('co2_emissions.csv') as co2_data:
         toInsert = {"Country": row[0], "Country Code": countryCodeMap[row[0]], "Year": int(row[1]), "AnnualCO2Emissions": float(row[2]) * 1000000, "AnnualCO2EmissionsPerCapita": float(row[8]) * 1000000000000}
         x = CO2Emissions.insert_one(toInsert)
 
+myclient.close()
+
 '''
 
 import mysql.connector
 
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379139"
+dbUser = "sql9379184"
 dbPassword = "RKBNi5PlkS"
 dbName = 'sql9379139'
 

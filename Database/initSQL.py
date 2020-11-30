@@ -12,6 +12,6 @@ db = mysql.connector.connect(host = dbIP,
 cursor = db.cursor()
 cursor.execute("USE sql9379184;")
 cursor.execute("CREATE TABLE User (UserID VARCHAR(30) PRIMARY KEY, Password VARCHAR(30) NOT NULL)")
-cursor.execute("CREATE TABLE Simulation (SimulationName INT NOT NULL, Year INT NOT NULL, CO2Emissions REAL NOT NULL, UserID VARCHAR(30) NOT NULL, FOREIGN KEY(UserID) REFERENCES User(UserID) ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY(UserID, SimulationName, Year))")
+cursor.execute("CREATE TABLE Simulation (SimulationName INT NOT NULL, Year INT NOT NULL, Country NOT NULL, CO2Emissions REAL NOT NULL, UserID VARCHAR(30) NOT NULL, FOREIGN KEY(UserID) REFERENCES User(UserID) ON DELETE CASCADE ON UPDATE CASCADE, PRIMARY KEY(UserID, SimulationName, Year))")
 cursor.close()
 db.close()
