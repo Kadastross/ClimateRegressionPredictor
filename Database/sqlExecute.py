@@ -8,15 +8,13 @@ from flask import jsonify
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
-# dbUser = "root"
-dbUser = "sql9379184"
-# dbPassword = "password"
-dbPassword = "VpNfwUsaws"
+dbUser = "sql9379236"
+dbPassword = "Ax3afA2tkU"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379184",
+                                    database = "sql9379236",
                                     auth_plugin = 'mysql_native_password')
 
 def exit_handler():
@@ -30,27 +28,75 @@ CORS(app)
 userID = ""
 
 @app.route('/')
+
 @app.route('/createSimulation', methods=['GET', 'POST'])
 def createSimulation():
     print("insert completed")
     results = request.get_json()
-    sql_insert_Query = "INSERT INTO Simulation (SimulationName, Year, CO2Emissions, UserID, Country) VALUES (%s, %s, %s, %s, %s)" 
+    sql_insert_Query = "INSERT INTO Simulation (SimulationName, UserID, Country) VALUES (%s, %s, %s)" 
     cursor = connection.cursor()
-    if (results["username"] == ""):
-        results["username"] = "mohamed"
-    cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], results["username"], results["country"]))
+    print(results)
+    cursor.execute(sql_insert_Query, (results["simName"], results["username"], results["country"]))
     connection.commit()
     cursor.close()
     return "simulation success"
+
+@app.route('/addNewDataPoint', methods = ['GET', 'POST'])
+def addNewDataPoint():
+    results = request.get_json()
+    sql_find_simID = "SELECT SimulationID, Country FROM Simulation where SimulationName = %s AND UserID = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_find_simID, (results["simName"], results["username"]))
+    records = cursor.fetchall()
+    simID = records[0][0]
+    country = records[0][1]
+    sql_insert_Query = "INSERT INTO Datapoints (SimulationID, Year, Country, CO2Emissions) VALUES (%s, %s, %s, %s)"
+    cursor = connection.cursor()
+    cursor.execute(sql_insert_Query, (simID, results["year"], country, results["co2"]))
+    connection.commit()
+    cursor.close()
+    return "success"
+
+
+
+@app.route('/getSimulationNames', methods=['GET', 'POST'])
+def getSimulationNames():
+    results = request.get_json()
+    sql_view_Query = "SELECT SimulationName FROM Simulation WHERE UserID = '%s'" % (results["username"])
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
+@app.route('/getYearData', methods=['GET', 'POST'])
+def getYearData():
+    results = request.get_json()
+    sql_find_simID = "SELECT SimulationID  FROM Simulation where SimulationName = '%s' AND UserID = 'cait'" % (results["simName"]) #FIX THIS USERID
+    cursor = connection.cursor()
+    cursor.execute(sql_find_simID)
+    records = cursor.fetchall()
+    simID = records[0][0]
+    sql_view_Query = "SELECT Year FROM Datapoints WHERE UserID = %s AND SimulationID = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query,(results["username"],simID))
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
 
 @app.route('/updateSimulation', methods=['GET', 'POST'])
 def updateSimulation():
     print("update completed")
     results = request.get_json()
-    # sql_update_Query = "UPDATE Simulation SET Year = %s, CO2Emissions = %s , Country = %s WHERE SimulationName = %s;"
-    sql_update_Query = "UPDATE Simulation natural join User SET Simulation.Year = %s, Simulation.CO2Emissions = %s , Simulation.Country = %s WHERE Simulation.SimulationName = %s AND User.UserID = %s"
+    sql_find_simID = "SELECT SimulationID  FROM Simulation where SimulationName = '%s' AND UserID = 'cait'" % (results["simName"]) #FIX THIS USERID
     cursor = connection.cursor()
-    cursor.execute(sql_update_Query, (results["year"], results["co2"], results["country"], results["simID"], results["username"]))
+    cursor.execute(sql_find_simID)
+    records = cursor.fetchall()
+    simID = records[0][0]
+    sql_update_Query = "UPDATE Datapoints SET CO2Emissions = %s WHERE SimulationID = %s AND UserID = %s AND Year = 2020"
+    cursor = connection.cursor()
+    cursor.execute(sql_update_Query, (results["co2"], simID, results["username"]))
     connection.commit()
     cursor.close()
     return "simulation success"
