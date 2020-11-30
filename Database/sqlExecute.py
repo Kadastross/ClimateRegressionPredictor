@@ -20,8 +20,6 @@ connection = mysql.connector.connect(host = dbIP,
 
 def exit_handler():
     connection.close()
-    print('works')
-
 
 atexit.register(exit_handler)
 app = Flask(__name__)
@@ -40,7 +38,6 @@ def createSimulation():
     cursor.execute(sql_insert_Query, (results["simID"], results["year"], results["co2"], "mohamed"))
     connection.commit()
     cursor.close()
-    connection.close()
     return "simulation success"
 
 @app.route('/updateSimulation', methods=['GET', 'POST'])
@@ -52,7 +49,6 @@ def updateSimulation():
     cursor.execute(sql_update_Query)
     connection.commit()
     cursor.close()
-    connection.close()
     return "simulation success"
 
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
