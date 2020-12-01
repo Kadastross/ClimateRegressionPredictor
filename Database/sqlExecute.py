@@ -2,6 +2,7 @@ import mysql.connector, atexit, csv
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_cors import CORS
+from ClimateRegressionPredictor.Database.basicRegs import linReg, expReg
 
 
 # dbIP = "localhost"
@@ -114,6 +115,33 @@ def viewSimulation():
     #     temp = []
     #     for j in range(len(records[i])):
     #         temp.append()
+    return jsonify(records);
+
+@app.route('/runSimulation', methods=['GET', 'POST'])
+def runSimulation():
+    results = request.get_json()
+    sql_run_Query = "SELECT * FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_run_Query, (results["simName"], results["username"]))
+    records = cursor.fetchall()
+    cursor.close()
+    if (len(records) == 0):
+        return "fail"
+    print(records)
+    country = records[0][1]
+    userInput = [[], []]
+    for i in range(len(records)):
+        userInput[0].append(records[i][2])
+        userInput[1].append(records[i][3])
+    print(userInput)
+    # sql_run_Query = "SELECT Year, CO2Emissions FROM Table WHERE Country = %s"
+    # cursor.execute(sql_run_Query, (country))
+    # records = cursor.fetchall()
+    # existingData = [[], []]
+    # for i in range(len(records)):
+    #     existingData[0].append(records[i][0])
+    #     existingData[1].append(records[i][1])
+    # lin, exp = 
     return jsonify(records);
 
 @app.route('/signUp', methods=['GET', 'POST'])
