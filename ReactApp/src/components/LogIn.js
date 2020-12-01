@@ -10,6 +10,7 @@ import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import Simulation from './Simulation'
 import SignUp from './SignUp'
 import Switch from 'react-bootstrap/esm/Switch';
+import '../App.css'
 
 class LogIn extends React.Component {
     constructor(props) {
@@ -46,8 +47,10 @@ class LogIn extends React.Component {
         .then((data) => {
                 console.log(data)
                 if (data === "1") {
+                    ls.set("validLogin", true)
                     this.setState({validLogin: "true"})
                 } else {
+                    ls.set("validLogin", false)
                     this.setState({validLogin: "false"})
                 }   
         })
@@ -57,10 +60,10 @@ class LogIn extends React.Component {
     }
 
     render() {
-        console.log(this.state.validLogin)
+        console.log(ls.get("validLogin"))
         return (
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop:"13%"}}>
-                <Card style={{width: '25rem' }}>
+            <div className="Main-Background">
+                <Card style={{marginTop:"17%", marginLeft: "35%", width: '25rem'}}>
                     <Card.Body>
                         <Card.Title>Log In</Card.Title>
                         <Card.Text>
@@ -80,7 +83,7 @@ class LogIn extends React.Component {
                                 }
                                 {this.state.validLogin == "" && 
                                     <div>
-                                        <Button style={{marginTop:"20px"}} variant="primary" value = {this.state.username} onClick={this.logIn}>LogIn</Button>
+                                        <Button style={{marginTop:"20px"}} variant="danger" value = {this.state.username} onClick={this.logIn}>LogIn</Button>
                                     </div>
                                 }
                                 <Form.Text style={{marginTop:"20px"}} >
