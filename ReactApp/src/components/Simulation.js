@@ -225,6 +225,33 @@ class Simulation extends React.Component {
         })
     }
 
+    run = () => {
+        console.log("run")
+        var data = {
+            "simName": this.state.simID,
+            "username": this.state.userID
+        }
+        fetch('http://127.0.0.1:5000/runSimulation' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+            console.log(data)
+            if (data === "fail") {
+                this.setState({simIDFound:"false"})
+            } else {
+                this.setState({viewData: data})
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     delete = () => {
         console.log("delete")
         var data = {
@@ -394,7 +421,7 @@ class Simulation extends React.Component {
                                             })}
                                     </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.view}>View Simulation</Button>
-                                <Button style ={{marginTop:"20px", marginLeft:"7px"}} variant="danger">Run Simulation</Button>
+                                <Button style ={{marginTop:"20px", marginLeft:"7px"}} variant="danger" onClick={this.run}>Run Simulation</Button>
                                 {this.state.validData === "true" &&
                                 <Card.Text style={{marginTop:"20px"}}>
                                         <Card.Text>Country: {this.state.viewData[0][0]}</Card.Text>

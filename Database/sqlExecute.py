@@ -2,6 +2,7 @@ import mysql.connector, atexit, csv
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_cors import CORS
+from basicRegs import linReg, expReg
 
 
 # dbIP = "localhost"
@@ -95,6 +96,37 @@ def viewSimulation():
     for i in range(len(records)):
         dataNeeded.append([records[i][1], records[i][2], records[i][3]])
     return jsonify(dataNeeded);
+
+@app.route('/runSimulation', methods=['GET', 'POST'])
+def runSimulation():
+    results = request.get_json()
+    sql_run_Query = "SELECT * FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_run_Query, (results["simName"], results["username"]))
+    records = cursor.fetchall()
+    cursor.close()
+    if (len(records) == 0):
+        return "fail"
+    print(records)
+    startYear = 0
+    country = records[0][1]
+    userInput, existingData = [], []
+    for i in range(len(records)):
+        userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]})
+    print(userInput)
+    # sql_run_Query = "SELECT Year, CO2Emissions FROM Table WHERE Country = %s"
+    # cursor.execute(sql_run_Query, (country))
+    # records = cursor.fetchall()
+    # for i in range(len(records)):
+    #     existingData.append({"Year": records[i][0], "CO2Emissions": records[i][1]})
+    # linModel = linReg(startYear, userInput, existingData)
+    # expModel = expReg(startYear, userInput, existingData)
+    retval = {}
+    # retval['Country'] = country
+    # retval['ExistingData'] = existingData
+    # retval['LinModel'] = linModel
+    # retval['ExpModel'] = expModel
+    return jsonify(retval);
 
 #GET ALL SIMULATION NAMES THE USER CREATED.
 @app.route('/getSimulationNames', methods=['GET', 'POST'])
