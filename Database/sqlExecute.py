@@ -2,7 +2,7 @@ import mysql.connector, atexit, csv
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_cors import CORS
-from ClimateRegressionPredictor.Database.basicRegs import linReg, expReg
+from basicRegs import linReg, expReg
 
 
 # dbIP = "localhost"
@@ -38,7 +38,7 @@ def createSimulation():
     cursor.execute(sql_insert_Query, (results["simName"], results["username"], results["country"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/addNewDataPoint', methods = ['GET', 'POST'])
 def addNewDataPoint():
@@ -54,7 +54,7 @@ def addNewDataPoint():
     cursor.execute(sql_insert_Query, (simID, results["year"], country, results["co2"]))
     connection.commit()
     cursor.close()
-    return "success"
+    return "s"
 
 
 
@@ -87,7 +87,7 @@ def updateSimulation():
     cursor.execute(sql_update_Query, (results["co2"], results["simName"], results["username"], results["year"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
 def deleteSimulation():
@@ -97,7 +97,7 @@ def deleteSimulation():
     cursor.execute(sql_delete_Query, (results["simName"], results["username"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/viewSimulation', methods=['GET', 'POST'])
 def viewSimulation():
@@ -108,14 +108,12 @@ def viewSimulation():
     records = cursor.fetchall()
     cursor.close()
     if (len(records) == 0):
-        return "fail"
+        return ""
     print(records)
     dataNeeded = []
-    # for i in range(len(records)):
-    #     temp = []
-    #     for j in range(len(records[i])):
-    #         temp.append()
-    return jsonify(records);
+    for i in range(len(records)):
+        dataNeeded.append([records[i][1], records[i][2], records[i][3]])
+    return jsonify(dataNeeded);
 
 @app.route('/runSimulation', methods=['GET', 'POST'])
 def runSimulation():
@@ -128,21 +126,25 @@ def runSimulation():
     if (len(records) == 0):
         return "fail"
     print(records)
+    startYear = 0
     country = records[0][1]
-    userInput = [[], []]
+    userInput, existingData = [], []
     for i in range(len(records)):
-        userInput[0].append(records[i][2])
-        userInput[1].append(records[i][3])
+        userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]})
     print(userInput)
     # sql_run_Query = "SELECT Year, CO2Emissions FROM Table WHERE Country = %s"
     # cursor.execute(sql_run_Query, (country))
     # records = cursor.fetchall()
-    # existingData = [[], []]
     # for i in range(len(records)):
-    #     existingData[0].append(records[i][0])
-    #     existingData[1].append(records[i][1])
-    # lin, exp = 
-    return jsonify(records);
+    #     existingData.append({"Year": records[i][0], "CO2Emissions": records[i][1]})
+    # linModel = linReg(startYear, userInput, existingData)
+    # expModel = expReg(startYear, userInput, existingData)
+    retval = {}
+    # retval['Country'] = country
+    # retval['ExistingData'] = existingData
+    # retval['LinModel'] = linModel
+    # retval['ExpModel'] = expModel
+    return jsonify(retval);
 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():

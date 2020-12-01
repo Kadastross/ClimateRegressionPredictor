@@ -5,7 +5,14 @@ from scipy.optimize import curve_fit
 
 def linReg(startYear, userInput, existingData):
     endYear = max(userInput[0])
-    data = pd.DataFrame(np.array([userInput[0] + existingData[0], userInput[1] + existingData[1]]), columns=['Year', 'CO2Emissions'])
+    years, points = [], []
+    for elem in existingData:
+        years.append(elem["Year"])
+        points.append(elem["CO2Emissions"])
+    for elem in userInput:
+        years.append(elem["Year"])
+        points.append(elem["CO2Emissions"])
+    data = pd.DataFrame(np.array([years, points]), columns=['Year', 'CO2Emissions'])
     x = data['Year']
     y = data['CO2Emissions'] 
     lin_model = np.polyfit(x, y, 1)
@@ -20,7 +27,14 @@ def expReg(startYear, userInput, existingData):
     def func(x, a, b, c):
         return a * np.exp(b * x) + c
     endYear = max(userInput[0])
-    data = pd.DataFrame(np.array([userInput[0] + existingData[0], userInput[1] + existingData[1]]), columns=['Year', 'CO2Emissions'])
+    years, points = [], []
+    for elem in existingData:
+        years.append(elem["Year"])
+        points.append(elem["CO2Emissions"])
+    for elem in userInput:
+        years.append(elem["Year"])
+        points.append(elem["CO2Emissions"])
+    data = pd.DataFrame(np.array([years, points]), columns=['Year', 'CO2Emissions'])
     x = data['Year']
     y = data['CO2Emissions']
     popt, pcov = curve_fit(func,  x,  y)
