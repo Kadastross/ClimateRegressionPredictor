@@ -23,10 +23,12 @@ class LogIn extends React.Component {
 
     changePassword =(e) => {
         this.setState({password: e.target.value })
+        ls.set('password', e.target.value)
     }
     logIn = () => {
         var data = {
-            "username":this.state.username
+            "username":this.state.username,
+            "password":this.state.password
         }
         fetch('http://127.0.0.1:5000/logIn' , {
             headers: {
