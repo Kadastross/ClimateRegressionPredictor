@@ -5,6 +5,7 @@ import SignUp from './components/SignUp.js'
 import './App.css'
 import {BrowserRouter, Route} from 'react-router-dom'
 import * as ROUTES from './components/Routes.js'
+import LineGraph from './components/LineGraph.js'
 
 class App extends React.Component {
   render() {
@@ -17,7 +18,6 @@ class App extends React.Component {
           <Route path={ROUTES.SIMULATIONS} component={Simulation} />
         </div>
   </BrowserRouter>
-      
     )
   }
 }
