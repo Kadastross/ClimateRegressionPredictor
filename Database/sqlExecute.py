@@ -93,7 +93,7 @@ def deleteSimulation():
     results = request.get_json()
     sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_delete_Query, (results["simID"], results["username"]))
+    cursor.execute(sql_delete_Query, (results["simName"], results["username"]))
     connection.commit()
     cursor.close()
     return "simulation success"
@@ -101,18 +101,20 @@ def deleteSimulation():
 @app.route('/viewSimulation', methods=['GET', 'POST'])
 def viewSimulation():
     results = request.get_json()
-    sql_view_Query = "SELECT * FROM Datapoints WHERE SimulationName = %s AND UserID = %s" #find all datapoints with some simulation name.
+    sql_view_Query = "SELECT * FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_view_Query, (results["simID"], results["username"]))
+    cursor.execute(sql_view_Query, (results["simName"], results["username"]))
     records = cursor.fetchall()
     cursor.close()
     if (len(records) == 0):
         return "fail"
-    simID = records[0][0]
-    year = records[0][1]
-    co2 = records[0][2]
-    return_string = "{} {} {}".format(simID, year, co2)
-    return return_string
+    print(records)
+    dataNeeded = []
+    # for i in range(len(records)):
+    #     temp = []
+    #     for j in range(len(records[i])):
+    #         temp.append()
+    return jsonify(records);
 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():

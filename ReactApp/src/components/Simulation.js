@@ -23,9 +23,7 @@ class Simulation extends React.Component {
             simulationNameList: [],
             yearList: [],
             simIDFound: "",
-            viewSimID: -1,
-            viewYear: -1,
-            viewCO2: -1,
+            viewData: [],
             userID: ""
         }
     }
@@ -194,21 +192,14 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then((data) => {
             console.log(data)
             if (data === "fail") {
                 this.setState({simIDFound:"false"})
             } else {
-                var stringSplit = data.split(" ")
-                this.setState(
-                    {viewSimID: stringSplit[0],
-                    viewYear: stringSplit[1],
-                    viewCO2: stringSplit[2],
-                    simIDFound: "true"}
-                )
+                this.setState({viewData: data})
             }
-
         })
         .catch((error) => {
             console.log(error)
@@ -239,12 +230,12 @@ class Simulation extends React.Component {
     }
 
     render() {
-        console.log(this.state.simID)
-        console.log(this.state.year)
-        console.log(this.state.co2)
-        console.log(this.state.viewResult)
-        console.log(this.state.userID)
-        console.log(this.state.country)
+        // console.log(this.state.simID)
+        // console.log(this.state.year)
+        // console.log(this.state.co2)
+        // console.log(this.state.viewResult)
+        // console.log(this.state.userID)
+        // console.log(this.state.country)
 
         return (
         <div className="Sim-Background">
@@ -350,7 +341,7 @@ class Simulation extends React.Component {
                         <Card.Title>View a Simulation</Card.Title>
                         <Card.Text>
                             <Form>
-                            <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.simID} onClick={this.getAllSimName}  onChange={this.changeSimId}>
+                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.simID} onClick={this.getAllSimName}  onChange={this.changeSimId}>
                                         <option>Select Simulation To View</option>
                                         {this.state.simulationNameList.map(sim => {
                                             return (
@@ -369,6 +360,7 @@ class Simulation extends React.Component {
                                 <Form.Text>CO2 Emissions: {this.state.viewCO2}</Form.Text>
                                 </div>
                                 }
+                                <Button style ={{marginTop:"20px"}} variant="danger">Run Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
