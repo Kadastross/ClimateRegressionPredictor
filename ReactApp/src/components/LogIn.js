@@ -6,13 +6,19 @@ import Button from 'react-bootstrap/Button'
 import {Link, withRouter } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import ls from 'local-storage'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
+import Simulation from './Simulation'
+import SignUp from './SignUp'
+import Switch from 'react-bootstrap/esm/Switch';
+import '../App.css'
 
 class LogIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             username:"",
-            password:""
+            password:"",
+            validLogin:""
         }
     }
 
@@ -40,6 +46,13 @@ class LogIn extends React.Component {
         .then(response => response.text())
         .then((data) => {
                 console.log(data)
+                if (data === "1") {
+                    ls.set("validLogin", true)
+                    this.setState({validLogin: "true"})
+                } else {
+                    ls.set("validLogin", false)
+                    this.setState({validLogin: "false"})
+                }   
         })
         .catch((error) => {
             console.log(error)
@@ -47,11 +60,10 @@ class LogIn extends React.Component {
     }
 
     render() {
-        console.log(this.state.username)
-        console.log(this.state.password)
+        console.log(ls.get("validLogin"))
         return (
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop:"13%"}}>
-                <Card style={{width: '25rem' }}>
+            <div className="Main-Background">
+                <Card style={{marginTop:"17%", marginLeft: "35%", width: '25rem'}}>
                     <Card.Body>
                         <Card.Title>Log In</Card.Title>
                         <Card.Text>
@@ -60,9 +72,20 @@ class LogIn extends React.Component {
                                 <Form.Control type="username" placeholder = "Enter UserID" value = {this.state.username} onChange={this.changeUsername}/>
                                 <Form.Label style={{marginTop:"20px"}}>Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" value = {this.state.password} onChange={this.changePassword}/>
-                                <Link to={ROUTES.SIMULATIONS}>
-                                    <Button to={ROUTES.SIMULATIONS} style={{marginTop:"20px"}} variant="primary" type="login" value = {this.state.username} onClick={this.logIn}>LogIn</Button>
-                                </Link>
+                                {this.state.validLogin == "true" && 
+                                        <Redirect to = {ROUTES.SIMULATIONS} />
+                                }
+                                {this.state.validLogin == "false" && 
+                                    <div>
+                                        <Button style={{marginTop:"20px"}} variant="primary" value = {this.state.username} onClick={this.logIn}>LogIn</Button>
+                                        <Form.Text style={{marginTop:"20px"}}>Wrong Username and/or Password</Form.Text>
+                                    </div>
+                                }
+                                {this.state.validLogin == "" && 
+                                    <div>
+                                        <Button style={{marginTop:"20px"}} variant="danger" value = {this.state.username} onClick={this.logIn}>LogIn</Button>
+                                    </div>
+                                }
                                 <Form.Text style={{marginTop:"20px"}} >
                                     <Link to={ROUTES.SIGN_UP}> Don't Have an Account. Sign Up </Link>
                                 </Form.Text>

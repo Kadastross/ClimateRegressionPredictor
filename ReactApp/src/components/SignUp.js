@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import {Link, withRouter } from 'react-router-dom'
+import {Link, withRouter, Redirect } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import ls from 'local-storage'
 
@@ -12,7 +12,8 @@ class SignUp extends React.Component {
         super(props);
         this.state = {
             userID: "",
-            password:""
+            password:"",
+            validSignUp: ""
         }
     }
 
@@ -41,7 +42,11 @@ class SignUp extends React.Component {
         })
         .then(response => response.text())
         .then((data) => {
-                console.log(data)
+                if (data === "xxF") {
+                    this.setState({validSignUp: "false"})
+                } else {
+                    this.setState({validSignUp: "true"})
+                }
         })
         .catch((error) => {
             console.log(error)
@@ -50,8 +55,8 @@ class SignUp extends React.Component {
 
     render() {
         return (
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop:"13%"}}>
-                <Card style={{width: '25rem' }}>
+            <div className="Main-Background">
+                <Card style={{marginTop:"17%", marginLeft: "35%", width: '25rem'}}>
                     <Card.Body>
                         <Card.Title>Sign Up</Card.Title>
                         <Card.Text>
@@ -60,9 +65,20 @@ class SignUp extends React.Component {
                                 <Form.Control type="username" placeholder = "Enter UserID" value={this.state.userID} onChange={this.changeUserID} />
                                 <Form.Label style={{marginTop:"20px"}}>Enter Password</Form.Label>
                                 <Form.Control type="password" placeholder = "Enter Password" value={this.state.password} onChange={this.changePassword}/>
-                                <Link to={ROUTES.SIMULATIONS}>
-                                    <Button style={{marginTop:"20px"}} variant="primary" type="login" onClick={this.createUser}>Sign Up</Button>
-                                </Link>
+                                {this.state.validSignUp == "true" && 
+                                        <Redirect to = {ROUTES.ROOT} />
+                                }
+                                {this.state.validSignUp == "false" && 
+                                    <div>
+                                        <Button style={{marginTop:"20px"}} variant="danger" onClick={this.createUser}>Sign Up</Button>
+                                        <Form.Text style={{marginTop:"20px"}}>Username already exists. Please Select Another</Form.Text>
+                                    </div>
+                                }
+                                {this.state.validSignUp == "" && 
+                                    <div>
+                                        <Button style={{marginTop:"20px"}} variant="danger" onClick={this.createUser}>Sign Up</Button>
+                                    </div>
+                                }
                             </Form>
                         </Card.Text>
                     </Card.Body>

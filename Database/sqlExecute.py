@@ -163,10 +163,23 @@ def getCountries():
     listCountry = list(countries)
     return jsonify(listCountry)
 
+#CHECK IF USER EXISTS:
+def existsUser(user):
+    sql_login_query = "SELECT count(*) FROM User WHERE UserID = '%s'" % (user)
+    cursor = connection.cursor()
+    cursor.execute(sql_login_query)
+    records = cursor.fetchall()
+    cursor.close()
+    return records[0][0]
 #SIGN UP 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
     results = request.get_json()
+    numUser = existsUser(results["userID"])
+    print(numUser)
+    if (numUser == 1):
+        print("reached")
+        return "xxF"
     sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES (%s, %s)"
     cursor = connection.cursor()
     cursor.execute(sql_insert_Query, (results["userID"], results["password"]))

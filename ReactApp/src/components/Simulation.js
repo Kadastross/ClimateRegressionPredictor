@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import CardDeck from 'react-bootstrap/CardDeck'
 import './Simulation.css'
-import {Link, withRouter } from 'react-router-dom'
+import {Link, withRouter, Redirect } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
 import LineGraph from './LineGraph.js'
@@ -30,7 +30,8 @@ class Simulation extends React.Component {
             updateSimResult: "",
             deleteSimResult: "",
             addDataResult: "",
-            validInputYears: []
+            validInputYears: [],
+            validLogin: ""
         }
     }
 
@@ -277,10 +278,19 @@ class Simulation extends React.Component {
         })
     }
 
-    render() {        
+    logOut = () => {
+        ls.set("validLogin", false)
+        this.setState({validLogin: "false"})
+    }
+
+    render() {   
+        if (this.state.validLogin === "false") {
+            return <Redirect to="/" />
+        }     
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
+            <Button style = {{marginLeft:"20px"}} onClick = {this.logOut}>Log Out</Button>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
