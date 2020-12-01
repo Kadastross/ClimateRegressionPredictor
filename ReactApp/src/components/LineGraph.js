@@ -3,7 +3,7 @@ import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import { csv } from 'd3-fetch'
-import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter } from 'victory'
+import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
 import { color } from 'd3';
 
 const filterData = (data, country) => {
@@ -33,48 +33,49 @@ const LineGraph = () => {
         <VictoryChart
             width='900'
             height='500'
-            domainPadding={50}
-            padding={{ top: 10, bottom: 40, left: 90, right: 10 }}
+            domainPadding={40}
+            padding={{ top: 10, bottom: 40, left: 80, right: 40 }}
+            containerComponent={<VictoryVoronoiContainer/>}
         >
         {data.length > 0 &&(
         <VictoryAxis
             label="Year"
-            tickCount={d.length/4}
+            tickCount={30}
             style={{
                 axis: {stroke: "white"},
                 axisLabel: {fill: "white"},
                 tickLabels: {fontSize: 10, angle: 45, fill: "white"},
-                grid: {
-                    stroke: "lightgrey"
-                }
+                grid: {stroke: "white", strokeDasharray: "5, 5", opacity: 0.5}
             }}
         />)}
         {data.length > 0 &&(
         <VictoryAxis
             dependentAxis={true}
             label="CO2 Emissions (Tons)"
-            tickCount={d.length/10}
+            tickCount={30}
+            tickFormat={(t) => `${Math.round(t/1000000)}M`}
             style={{
                 axis: {stroke: "white"},
-                axisLabel: {fill: "white", padding: 60},
+                axisLabel: {fill: "white", padding: 40},
                 tickLabels: {fontSize: 10, angle: -45, fill: "white"},
-                grid: {
-                    stroke: "lightgrey"
-                }
+                grid: {stroke: "white", strokeDasharray: "5, 5", opacity: 0.5}
             }}
         />)}
         
         {data.length > 0 &&(
             <VictoryScatter 
                 data={d} 
-                size={2}
                 style={{
                     data: {
                       fill: "#02B875"
                     }
                   }}
                 x='Year' 
-                y='Emissions' 
+                y='Emissions'
+                // labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
+                labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.Emissions/1000000)}M`]}
+                labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
+                size={({ active }) => active ? 2 : 1}
             />)}
         </VictoryChart>
         </div>
