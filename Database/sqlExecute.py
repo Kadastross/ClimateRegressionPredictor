@@ -124,7 +124,7 @@ def runSimulation():
     retval = {}
     # retval['Country'] = country
     # retval['ExistingData'] = existingData
-    # retval['LinModel'] = linModel
+    # retval['LinModel'] = linModeldd
     # retval['ExpModel'] = expModel
     return jsonify(retval);
 
