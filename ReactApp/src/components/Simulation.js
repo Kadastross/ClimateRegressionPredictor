@@ -90,6 +90,8 @@ class Simulation extends React.Component {
         .catch((error) => {
             console.log(error)
         })
+
+        console.log('executed')
     }
 
     changeSimId = (e) => {
@@ -110,8 +112,8 @@ class Simulation extends React.Component {
 
     addNewDataPoint = () => {
         var data = {
-            "year": this.state.year, 
-            "co2": this.state.co2, 
+            "year": this.state.year,
+            "co2": this.state.co2,
             "simName":this.state.simID,
             "username": this.state.userID
         }
@@ -296,7 +298,7 @@ class Simulation extends React.Component {
                                 </Form>
                             </Card.Text>
                         </Card.Body>
-                    </Card>                    
+                    </Card>
                 <Card  border = "danger" style={{width: '25rem' }}>
                     <Card.Body>
                         <Card.Title>Update Data Points</Card.Title>

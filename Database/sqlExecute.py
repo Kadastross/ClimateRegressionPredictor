@@ -1,9 +1,7 @@
 import mysql.connector, atexit, csv
 from mysql.connector import Error
-from flask import Flask, render_template, request, redirect, flash, url_for
-import random
+from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_cors import CORS
-from flask import jsonify
 
 
 # dbIP = "localhost"
@@ -33,7 +31,7 @@ userID = ""
 def createSimulation():
     print("insert completed")
     results = request.get_json()
-    sql_insert_Query = "INSERT INTO Simulation (SimulationName, UserID, Country) VALUES (%s, %s, %s)" 
+    sql_insert_Query = "INSERT INTO Simulation (SimulationName, UserID, Country) VALUES (%s, %s, %s)"
     cursor = connection.cursor()
     print(results)
     cursor.execute(sql_insert_Query, (results["simName"], results["username"], results["country"]))
@@ -72,14 +70,9 @@ def getSimulationNames():
 @app.route('/getYearData', methods=['GET', 'POST'])
 def getYearData():
     results = request.get_json()
-    sql_find_simID = "SELECT SimulationID  FROM Simulation where SimulationName = '%s' AND UserID = 'cait'" % (results["simName"]) #FIX THIS USERID
+    sql_view_Query = "SELECT Year FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_find_simID)
-    records = cursor.fetchall()
-    simID = records[0][0]
-    sql_view_Query = "SELECT Year FROM Datapoints WHERE UserID = %s AND SimulationID = %s"
-    cursor = connection.cursor()
-    cursor.execute(sql_view_Query,(results["username"],simID))
+    cursor.execute(sql_view_Query, ((results["simName"],results["username"])))
     records = cursor.fetchall()
     cursor.close()
     return jsonify(records)
@@ -87,23 +80,16 @@ def getYearData():
 
 @app.route('/updateSimulation', methods=['GET', 'POST'])
 def updateSimulation():
-    print("update completed")
     results = request.get_json()
-    sql_find_simID = "SELECT SimulationID  FROM Simulation where SimulationName = '%s' AND UserID = 'cait'" % (results["simName"]) #FIX THIS USERID
+    sql_update_Query = "UPDATE Datapoints SET CO2Emissions = %s WHERE SimulationID = (SELECT SimulationID FROM Simulation WHERE SimulationName = %s AND UserID = %s) AND Year = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_find_simID)
-    records = cursor.fetchall()
-    simID = records[0][0]
-    sql_update_Query = "UPDATE Datapoints SET CO2Emissions = %s WHERE SimulationID = %s AND UserID = %s AND Year = 2020"
-    cursor = connection.cursor()
-    cursor.execute(sql_update_Query, (results["co2"], simID, results["username"]))
+    cursor.execute(sql_update_Query, (results["co2"], results["simName"], results["username"], results["year"]))
     connection.commit()
     cursor.close()
     return "simulation success"
 
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
 def deleteSimulation():
-    print("delete completed")
     results = request.get_json()
     sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
@@ -114,39 +100,41 @@ def deleteSimulation():
 
 @app.route('/viewSimulation', methods=['GET', 'POST'])
 def viewSimulation():
-    print("view completed")
     results = request.get_json()
     sql_view_Query = "SELECT * FROM Datapoints WHERE SimulationName = %s AND UserID = %s" #find all datapoints with some simulation name.
     cursor = connection.cursor()
     cursor.execute(sql_view_Query, (results["simID"], results["username"]))
     records = cursor.fetchall()
+    cursor.close()
     if (len(records) == 0):
         return "fail"
     simID = records[0][0]
     year = records[0][1]
     co2 = records[0][2]
     return_string = "{} {} {}".format(simID, year, co2)
-    cursor.close()
     return return_string
 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
-    print("create User Complete")
     results = request.get_json()
-    print(results)
     sql_insert_Query = "INSERT INTO User (UserID, Password) VALUES (%s, %s)"
     cursor = connection.cursor()
     cursor.execute(sql_insert_Query, (results["userID"], results["password"]))
     connection.commit()
-    userID = results["userID"]
     cursor.close()
+    userID = results["userID"]
     return userID
 
 @app.route('/logIn', methods=['GET', 'POST'])
 def logIn():
     results = request.get_json()
-    userID = results["username"]
-    return userID
+    sql_login_query = "SELECT count(*) FROM User WHERE UserID = %s AND Password = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_login_query, (results["username"], results["password"]))
+    records = cursor.fetchall()
+    cursor.close()
+    print(records[0][0])
+    return str(records[0][0])
 
 @app.route('/getUserID', methods=['GET'])
 def getUserID():
@@ -154,7 +142,7 @@ def getUserID():
     return userID
 
 @app.route('/getCountries', methods=['GET'])
-def getCountries(): 
+def getCountries():
     countries = set()
 
     with open('annual-co2-emissions-per-country.csv') as co2_data:
