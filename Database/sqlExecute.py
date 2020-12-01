@@ -26,6 +26,19 @@ CORS(app)
 #global variables
 userID = ""
 
+#FIGURING OUT IF TUPLE EXISTS IN DATABASE: 
+# def simExists(simName, userID):
+#     sql_login_query = "SELECT count(*) FROM Simulation WHERE UserID = %s AND Password = %s"
+#     cursor = connection.cursor()
+#     cursor.execute(sql_login_query, (results["username"], results["password"]))
+#     records = cursor.fetchall()
+#     cursor.close()
+#     print(records[0][0])
+#     return str(records[0][0])
+
+
+
+
 @app.route('/')
 
 #CREATE A NEW SIMULATION (ADD TO SIMULATION TABLE)
@@ -160,7 +173,7 @@ def getCountries():
         next(csv_reader)
         for row in csv_reader:
             countries.add(row[0])
-    listCountry = list(countries)
+    listCountry = sorted(list(countries))
     return jsonify(listCountry)
 
 #CHECK IF USER EXISTS:

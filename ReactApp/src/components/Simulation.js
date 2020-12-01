@@ -9,7 +9,9 @@ import {Link, withRouter, Redirect } from 'react-router-dom'
 import * as ROUTES from './Routes.js'
 import HeatMap from './HeatMap.js'
 import LineGraph from './LineGraph.js'
+import Share from './Share'
 import ls from 'local-storage'
+import { isoFormat } from 'd3';
 
 class Simulation extends React.Component {
     constructor(props) {
@@ -289,8 +291,9 @@ class Simulation extends React.Component {
         }     
         return (
         <div className="Sim-Background">
-            <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
+            <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
             <Button style = {{marginLeft:"20px"}} onClick = {this.logOut}>Log Out</Button>
+            <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
@@ -451,6 +454,7 @@ class Simulation extends React.Component {
                     </Card.Body>
                 </Card>
                 </CardDeck>
+                <Share />
                 <h1 style={{color:"black"}}>xyz</h1>
         </div>
         )
