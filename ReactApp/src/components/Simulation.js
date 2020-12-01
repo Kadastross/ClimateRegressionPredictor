@@ -24,7 +24,12 @@ class Simulation extends React.Component {
             yearList: [],
             simIDFound: "",
             viewData: [],
-            userID: ""
+            validData: "false",
+            userID: "",
+            createSimResult: "",
+            updateSimResult: "",
+            deleteSimResult: "",
+            addDataResult: ""
         }
     }
 
@@ -123,9 +128,11 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
-                console.log(data)
+            if (data === "s") {
+                this.setState({addDataResult: "true"})
+            }
         })
         .catch((error) => {
             console.log(error)
@@ -146,8 +153,11 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
+                if (data === "s") {
+                    this.setState({createSimResult: "true"})
+                }
                 console.log(data)
         })
         .catch((error) => {
@@ -170,9 +180,11 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
-                console.log(data)
+            if (data === "s") {
+                this.setState({updateSimResult: "true"})
+            }
         })
         .catch((error) => {
             console.log(error)
@@ -195,10 +207,8 @@ class Simulation extends React.Component {
         .then(response => response.json())
         .then((data) => {
             console.log(data)
-            if (data === "fail") {
-                this.setState({simIDFound:"false"})
-            } else {
-                this.setState({viewData: data})
+            if (data != "") {
+                this.setState({viewData: data, validData: "true"})
             }
         })
         .catch((error) => {
@@ -219,9 +229,11 @@ class Simulation extends React.Component {
             method: "POST",
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then((data) => {
-                console.log(data)
+            if (data === "s") {
+                this.setState({deleteSimResult: "true"})
+            }
 
         })
         .catch((error) => {
@@ -236,7 +248,10 @@ class Simulation extends React.Component {
         // console.log(this.state.viewResult)
         // console.log(this.state.userID)
         // console.log(this.state.country)
-
+        if (this.state.viewData.length > 0){
+            console.log(this.state.viewData[0][0]) //how u access the 2D array of viewData
+        }
+        
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
@@ -262,6 +277,12 @@ class Simulation extends React.Component {
                                         })}
                                 </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.create}>Create Simulation</Button>
+                                {this.state.createSimResult === "true" && 
+                                    <Card.Text style={{marginTop:"20px"}}>Simulation Created Successfully</Card.Text>
+                                }
+                                {this.state.createSimResult === "false" && 
+                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                }
                             </Form>
                         </Card.Text>
                     </Card.Body>
@@ -286,6 +307,12 @@ class Simulation extends React.Component {
                                     <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
                                     <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                     <Button style={{marginTop:"20px"}} variant="danger" onClick={this.addNewDataPoint}>Add Data Point</Button>
+                                    {this.state.addDataResult === "true" && 
+                                    <Card.Text style={{marginTop:"20px"}}>Data Point Added Successfully</Card.Text>
+                                    }
+                                    {this.state.createSimResult === "false" && 
+                                        <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                    }
                                 </Form>
                             </Card.Text>
                         </Card.Body>
@@ -314,6 +341,12 @@ class Simulation extends React.Component {
                                 <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions</Form.Label>
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.update}>Update Data Points</Button>
+                                {this.state.updateSimResult === "true" && 
+                                    <Card.Text style={{marginTop:"20px"}}>Data Point Updated Successfully</Card.Text>
+                                }
+                                {this.state.createSimResult === "false" && 
+                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                }
                             </Form>
                         </Card.Text>
                     </Card.Body>
@@ -332,6 +365,12 @@ class Simulation extends React.Component {
                                             })}
                                     </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.delete}>Delete Simulation</Button>
+                                {this.state.deleteSimResult === "true" && 
+                                    <Card.Text style={{marginTop:"20px"}}>Simulation Deleted Successfully</Card.Text>
+                                }
+                                {this.state.createSimResult === "false" && 
+                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                }
                             </Form>
                         </Card.Text>
                     </Card.Body>
@@ -350,17 +389,21 @@ class Simulation extends React.Component {
                                             })}
                                     </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.view}>View Simulation</Button>
-                                {this.state.simIDFound === "false" &&
-                                <Form.Text>There is no corresponding simulationID to View/Delete.</Form.Text>
+                                <Button style ={{marginTop:"20px", marginLeft:"7px"}} variant="danger">Run Simulation</Button>
+                                {this.state.validData === "true" &&
+                                <Card.Text style={{marginTop:"20px"}}>
+                                        <Card.Text>Country: {this.state.viewData[0][0]}</Card.Text>
+                                        {this.state.viewData.map(sim => {
+                                            return (
+                                                <Card.Text>
+                                                    Year: {sim[1]}, 
+                                                    CO2 Emissions : {sim[2]} mTons
+                                                </Card.Text>
+                                                
+                                            )
+                                            })}
+                                </Card.Text>
                                 }
-                                {this.state.simIDFound ==="true" &&
-                                <div>
-                                <Form.Text>SimulationID: {this.state.viewSimID}</Form.Text>
-                                <Form.Text>Year: {this.state.viewYear}</Form.Text>
-                                <Form.Text>CO2 Emissions: {this.state.viewCO2}</Form.Text>
-                                </div>
-                                }
-                                <Button style ={{marginTop:"20px"}} variant="danger">Run Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>

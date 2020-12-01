@@ -37,7 +37,7 @@ def createSimulation():
     cursor.execute(sql_insert_Query, (results["simName"], results["username"], results["country"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/addNewDataPoint', methods = ['GET', 'POST'])
 def addNewDataPoint():
@@ -53,7 +53,7 @@ def addNewDataPoint():
     cursor.execute(sql_insert_Query, (simID, results["year"], country, results["co2"]))
     connection.commit()
     cursor.close()
-    return "success"
+    return "s"
 
 
 
@@ -86,7 +86,7 @@ def updateSimulation():
     cursor.execute(sql_update_Query, (results["co2"], results["simName"], results["username"], results["year"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
 def deleteSimulation():
@@ -96,7 +96,7 @@ def deleteSimulation():
     cursor.execute(sql_delete_Query, (results["simName"], results["username"]))
     connection.commit()
     cursor.close()
-    return "simulation success"
+    return "s"
 
 @app.route('/viewSimulation', methods=['GET', 'POST'])
 def viewSimulation():
@@ -107,14 +107,12 @@ def viewSimulation():
     records = cursor.fetchall()
     cursor.close()
     if (len(records) == 0):
-        return "fail"
+        return ""
     print(records)
     dataNeeded = []
-    # for i in range(len(records)):
-    #     temp = []
-    #     for j in range(len(records[i])):
-    #         temp.append()
-    return jsonify(records);
+    for i in range(len(records)):
+        dataNeeded.append([records[i][1], records[i][2], records[i][3]])
+    return jsonify(dataNeeded);
 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
