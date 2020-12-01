@@ -13,8 +13,8 @@ class App extends React.Component {
         <div>
           <hr />
           <Route exact path={ROUTES.ROOT} component={LogIn}/>
-          <Route path={ROUTES.SIGN_UP} component={SignUp} />
-          <Route path={ROUTES.SIMULATIONS} component={Simulation} />
+          <Route exact path={ROUTES.SIGN_UP} component={SignUp} />
+          <Route exact path={ROUTES.SIMULATIONS} component={Simulation} />
         </div>
   </BrowserRouter>
       
