@@ -29,7 +29,8 @@ class Simulation extends React.Component {
             createSimResult: "",
             updateSimResult: "",
             deleteSimResult: "",
-            addDataResult: ""
+            addDataResult: "",
+            validInputYears: []
         }
     }
 
@@ -95,6 +96,14 @@ class Simulation extends React.Component {
         })
 
         console.log('executed')
+    }
+
+    getInputYearDropdown = () => {
+        var validYears = []
+        for (let i = 2020; i < 2050; i++) {
+            validYears.push(i)
+        }
+        this.setState({validInputYears: validYears})
     }
 
     changeSimId = (e) => {
@@ -241,17 +250,7 @@ class Simulation extends React.Component {
         })
     }
 
-    render() {
-        // console.log(this.state.simID)
-        // console.log(this.state.year)
-        // console.log(this.state.co2)
-        // console.log(this.state.viewResult)
-        // console.log(this.state.userID)
-        // console.log(this.state.country)
-        if (this.state.viewData.length > 0){
-            console.log(this.state.viewData[0][0]) //how u access the 2D array of viewData
-        }
-        
+    render() {        
         return (
         <div className="Sim-Background">
             <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
@@ -302,8 +301,14 @@ class Simulation extends React.Component {
                                             )
                                             })}
                                     </select>
-                                    <Form.Label style={{marginTop:"20px"}}>Enter Year</Form.Label>
-                                    <Form.Control type="number" placeholder = "Year" value={this.state.year} onChange={this.changeYear}/>
+                                    <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.year} onClick={this.getInputYearDropdown}  onChange={this.changeYear}>
+                                        <option>Select Year</option>
+                                        {this.state.validInputYears.map(year => {
+                                            return (
+                                                <option value = {year}> {year} </option>
+                                            )
+                                            })}
+                                    </select>
                                     <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
                                     <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                     <Button style={{marginTop:"20px"}} variant="danger" onClick={this.addNewDataPoint}>Add Data Point</Button>
