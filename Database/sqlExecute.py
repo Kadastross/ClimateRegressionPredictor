@@ -28,6 +28,7 @@ userID = ""
 
 @app.route('/')
 
+#CREATE A NEW SIMULATION (ADD TO SIMULATION TABLE)
 @app.route('/createSimulation', methods=['GET', 'POST'])
 def createSimulation():
     print("insert completed")
@@ -40,6 +41,7 @@ def createSimulation():
     cursor.close()
     return "s"
 
+#ADD NEW DATA POINT (ADD TO DATAPOINTS TABLE)
 @app.route('/addNewDataPoint', methods = ['GET', 'POST'])
 def addNewDataPoint():
     results = request.get_json()
@@ -56,29 +58,7 @@ def addNewDataPoint():
     cursor.close()
     return "s"
 
-
-
-@app.route('/getSimulationNames', methods=['GET', 'POST'])
-def getSimulationNames():
-    results = request.get_json()
-    sql_view_Query = "SELECT SimulationName FROM Simulation WHERE UserID = '%s'" % (results["username"])
-    cursor = connection.cursor()
-    cursor.execute(sql_view_Query)
-    records = cursor.fetchall()
-    cursor.close()
-    return jsonify(records)
-
-@app.route('/getYearData', methods=['GET', 'POST'])
-def getYearData():
-    results = request.get_json()
-    sql_view_Query = "SELECT Year FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
-    cursor = connection.cursor()
-    cursor.execute(sql_view_Query, ((results["simName"],results["username"])))
-    records = cursor.fetchall()
-    cursor.close()
-    return jsonify(records)
-
-
+#UPDATE DATA POINTS (UPDATE FROM DATAPOINTS TABLE)
 @app.route('/updateSimulation', methods=['GET', 'POST'])
 def updateSimulation():
     results = request.get_json()
@@ -89,6 +69,7 @@ def updateSimulation():
     cursor.close()
     return "s"
 
+#DELETE SIMULATION (DELETE FROM SIMULATION)
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
 def deleteSimulation():
     results = request.get_json()
@@ -99,6 +80,7 @@ def deleteSimulation():
     cursor.close()
     return "s"
 
+#GET ALL DATAPOINTS ASSOCIATED WITH A SIMULATION NAME AND RETURN RESULTS OF SQL QUERY
 @app.route('/viewSimulation', methods=['GET', 'POST'])
 def viewSimulation():
     results = request.get_json()
@@ -146,6 +128,42 @@ def runSimulation():
     # retval['ExpModel'] = expModel
     return jsonify(retval);
 
+#GET ALL SIMULATION NAMES THE USER CREATED.
+@app.route('/getSimulationNames', methods=['GET', 'POST'])
+def getSimulationNames():
+    results = request.get_json()
+    sql_view_Query = "SELECT SimulationName FROM Simulation WHERE UserID = '%s'" % (results["username"])
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
+#GET ALL YEARS FROM THE DATAPOITNS THE USER ADDED.
+@app.route('/getYearData', methods=['GET', 'POST'])
+def getYearData():
+    results = request.get_json()
+    sql_view_Query = "SELECT Year FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query, ((results["simName"],results["username"])))
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
+
+#GET LIST OF COUNTRIES FOR DROPDOWN IN FRONT END
+@app.route('/getCountries', methods=['GET'])
+def getCountries():
+    countries = set()
+
+    with open('annual-co2-emissions-per-country.csv') as co2_data:
+        csv_reader = csv.reader(co2_data, delimiter=',')
+        next(csv_reader)
+        for row in csv_reader:
+            countries.add(row[0])
+    listCountry = list(countries)
+    return jsonify(listCountry)
+
+#SIGN UP 
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
     results = request.get_json()
@@ -157,6 +175,7 @@ def createUser():
     userID = results["userID"]
     return userID
 
+#LOGIN
 @app.route('/logIn', methods=['GET', 'POST'])
 def logIn():
     results = request.get_json()
@@ -172,18 +191,6 @@ def logIn():
 def getUserID():
     print("USER: ", userID)
     return userID
-
-@app.route('/getCountries', methods=['GET'])
-def getCountries():
-    countries = set()
-
-    with open('annual-co2-emissions-per-country.csv') as co2_data:
-        csv_reader = csv.reader(co2_data, delimiter=',')
-        next(csv_reader)
-        for row in csv_reader:
-            countries.add(row[0])
-    listCountry = list(countries)
-    return jsonify(listCountry)
 
 if __name__ == "__main__":
     app.run()
