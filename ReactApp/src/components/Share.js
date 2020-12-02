@@ -102,6 +102,7 @@ class Share extends React.Component {
 
     run = () => {
         console.log("run")
+        this.setState({successViewShare: ""})
         var data = {
             "simName": this.state.simView,
             "username": this.state.userView
@@ -149,6 +150,7 @@ class Share extends React.Component {
     }
 
     render() {
+        console.log(this.state.successViewShare)
         return(
             <div >
                 <h1 className="block-example border-bottom border-dark" style={{marginTop:"20px",marginLeft:"20px" , color:'white'}}> Share Your Simulations</h1>
@@ -207,6 +209,11 @@ class Share extends React.Component {
                         <div>
                             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>{this.state.userView}'s Co2 Emissions Graph</h2>
                             <LineGraph data={this.state.runData}></LineGraph>
+                        </div>
+                    }
+                    {this.state.successViewShare == "" && 
+                        <div>
+                            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Waiting For {this.state.userView}'s Graph ...</h2>
                         </div>
                     }
                 </div>

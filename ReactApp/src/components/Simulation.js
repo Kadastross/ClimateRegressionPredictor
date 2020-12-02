@@ -282,6 +282,7 @@ class Simulation extends React.Component {
 
     run = () => {
         console.log("run")
+        this.setState({successRun: ""})
         var data = {
             "simName": this.state.simID,
             "username": this.state.userID
@@ -305,6 +306,10 @@ class Simulation extends React.Component {
         })
         .catch((error) => {
             console.log(error)
+            this.setState({successRun:"false"})
+            setTimeout(function(){
+                this.setState({successRun:""});
+           }.bind(this),8000);
         })
     }
 
@@ -368,9 +373,6 @@ class Simulation extends React.Component {
             </select>
             <Button style ={{marginTop:"20px", marginLeft:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
             <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
-
-            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
-            <LineGraph data={this.state.runData}></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>
@@ -422,7 +424,7 @@ class Simulation extends React.Component {
                                             )
                                             })}
                                     </select>
-                                    <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions (Millions of Tons)</Form.Label>
+                                    <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions (Millions of Tons, less than 10000) </Form.Label>
                                     <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                     <Button style={{marginTop:"20px"}} variant="danger" onClick={this.addNewDataPoint}>Add Data Point</Button>
                                     {this.state.addDataResult === "true" && 
@@ -456,7 +458,7 @@ class Simulation extends React.Component {
                                             )
                                             })}
                                     </select>
-                                <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions (Millions of Tons)</Form.Label>
+                                <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions (Millions of Tons, less than 10000) </Form.Label>
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.update}>Update Data Points</Button>
                                 {this.state.updateSimResult === "true" && 
@@ -532,6 +534,16 @@ class Simulation extends React.Component {
                     <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
                     <LineGraph data={this.state.runData}></LineGraph>
                     </div>
+                }
+                {this.state.successRun == "false" && 
+                        <div class="alert alert-danger" role="alert" style={{marginTop:"30px"}}>
+                            {this.state.userView}You have entered a value that is too high. Please update and lower CO2 Emissions Levels!
+                        </div>
+                }
+                {this.state.successRun == "" && 
+                        <div>
+                            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>{this.state.userView}Waiting For Graph ...</h2>
+                        </div>
                 }
                 <Share />
                 <h1 style={{color:"black"}}>xyz</h1>
