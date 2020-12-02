@@ -343,6 +343,7 @@ class Simulation extends React.Component {
 
     logOut = () => {
         ls.set("validLogin", false)
+        ls.set("username", "")
         this.setState({validLogin: "false"})
     }
 
@@ -360,16 +361,36 @@ class Simulation extends React.Component {
                     <Button style = {{marginLeft:"50px"}} variant="danger" onClick = {this.logOut}>Log Out</Button>
                 </div>
             </div>
+
+            <nav style={{marginTop:"30px"}} class="navbar navbar-expand-lg navbar-dark bg-dark">
+            {/* <a class="navbar-brand" href="#"></a> */}
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Heat Map<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Create Predictive Simulation<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Share a Simulation</a>
+                </li>
+                </ul>
+            </div>
+            </nav>
+
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
-
             <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.map_year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
                                         <option>Select Year</option>
                                         {this.state.validMapYears.map(map_year => {
                                             return (
                                                 <option value = {map_year}> {map_year} </option>
                                             )
-                                            })}
+                                        })}
             </select>
             <Button style ={{marginTop:"20px", marginLeft:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
             <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
