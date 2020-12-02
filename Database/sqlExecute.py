@@ -26,7 +26,7 @@ CORS(app)
 #global variables
 userID = ""
 
-#FIGURING OUT IF TUPLE EXISTS IN DATABASE: 
+#FIGURING OUT IF TUPLE EXISTS IN DATABASE:
 # def simExists(simName, userID):
 #     sql_login_query = "SELECT count(*) FROM Simulation WHERE UserID = %s AND Password = %s"
 #     cursor = connection.cursor()
@@ -158,7 +158,7 @@ def getYearData():
     results = request.get_json()
     sql_view_Query = "SELECT Year FROM Datapoints Natural Join Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
-    cursor.execute(sql_view_Query, ((results["simName"],results["username"])))
+    cursor.execute(sql_view_Query, (results["simName"],results["username"]))
     records = cursor.fetchall()
     cursor.close()
     return jsonify(records)
@@ -166,15 +166,12 @@ def getYearData():
 #GET LIST OF COUNTRIES FOR DROPDOWN IN FRONT END
 @app.route('/getCountries', methods=['GET'])
 def getCountries():
-    countries = set()
-
-    with open('annual-co2-emissions-per-country.csv') as co2_data:
-        csv_reader = csv.reader(co2_data, delimiter=',')
-        next(csv_reader)
-        for row in csv_reader:
-            countries.add(row[0])
-    listCountry = sorted(list(countries))
-    return jsonify(listCountry)
+    sql_countries_query = "SELECT CountryName FROM Countries"
+    cursor = connection.cursor()
+    cursor.execute(sql_countries_query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
 
 #CHECK IF USER EXISTS:
 def existsUser(user):
@@ -184,7 +181,7 @@ def existsUser(user):
     records = cursor.fetchall()
     cursor.close()
     return records[0][0]
-#SIGN UP 
+#SIGN UP
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
     results = request.get_json()
