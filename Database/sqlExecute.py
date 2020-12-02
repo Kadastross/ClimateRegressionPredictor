@@ -125,9 +125,16 @@ def addNewDataPoint():
     cursor.execute(sql_find_simID, (results["simName"], results["username"]))
     records = cursor.fetchall()
     simID = records[0][0]
-    sql_insert_Query = "INSERT INTO Datapoints (SimulationID, Year, CO2Emissions) VALUES (%s, %s, %s)"
-    cursor = connection.cursor()
-    cursor.execute(sql_insert_Query, (simID, results["year"], results["co2"]))
+    sql_check_datapoints = "SELECT count(*) FROM Datapoints WHERE SimulationID = %s AND Year = %s"
+    cursor.execute(sql_check_datapoints, (simID, results["year"]))
+    records2 = cursor.fetchall()
+    exists = records2[0][0]
+    if exists:
+        sql_update_Query = "UPDATE Datapoints SET CO2Emissions = %s WHERE SimulationID = (SELECT SimulationID FROM Simulation WHERE SimulationName = %s AND UserID = %s) AND Year = %s"
+        cursor.execute(sql_update_Query, (results["co2"], results["simName"], results["username"], results["year"]))
+    else:
+        sql_insert_Query = "INSERT INTO Datapoints (SimulationID, Year, CO2Emissions) VALUES (%s, %s, %s)"
+        cursor.execute(sql_insert_Query, (simID, results["year"], results["co2"]))
     connection.commit()
     cursor.close()
     return "s"
