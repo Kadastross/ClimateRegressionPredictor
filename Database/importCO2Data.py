@@ -8,9 +8,9 @@ This file is only run one time in order to initialize the MySQL database with th
 import csv, mysql.connector
 
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379236"
-dbPassword = "Ax3afA2tkU"
-dbName = 'sql9379236'
+dbUser = "sql9379669"
+dbPassword = "LGGlMtRGdY"
+dbName = 'sql9379669'
 
 db = mysql.connector.connect(host = dbIP,
                                      user = dbUser,
@@ -22,7 +22,6 @@ cursor = db.cursor()
 countryCode = {}
 with open('Countries_Data.csv') as co2_data:
     csv_reader = csv.reader(co2_data, delimiter=',')
-    next(csv_reader) # skip first line
     for row in csv_reader:
         if len(row[0].strip()) is 0 or len(row[1].strip()) is 0 or len(row[2].strip()) is 0 or len(row[8].strip()) is 0:
             continue

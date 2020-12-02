@@ -7,13 +7,13 @@ from basicRegs import linReg, expReg
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379236"
-dbPassword = "Ax3afA2tkU"
+dbUser = "sql9379669"
+dbPassword = "LGGlMtRGdY"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379236",
+                                    database = "sql9379669",
                                     auth_plugin = 'mysql_native_password')
 
 driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "KtTJdqBc6jzeNze4"))
@@ -23,6 +23,9 @@ def create_user_node(tx, name):
 
 def create_simulation_node(tx, name, simID):
     tx.run("MATCH (a:User {UserID: $user}) CREATE (a)-[:WROTE]->(b:Simulation {SimulationID: $id})", user=name, id=simID)
+
+def delete_simulation_node(tx, simID):
+    tx.run("MATCH (a:Simulation {SimulationID:$id}) DETACH DELETE a", id=simID)
 
 def shared_to_relationship(tx, userA, userB):
     print('placeholder')
@@ -79,15 +82,14 @@ def createSimulation():
 @app.route('/addNewDataPoint', methods = ['GET', 'POST'])
 def addNewDataPoint():
     results = request.get_json()
-    sql_find_simID = "SELECT SimulationID, Country FROM Simulation where SimulationName = %s AND UserID = %s"
+    sql_find_simID = "SELECT SimulationID FROM Simulation where SimulationName = %s AND UserID = %s"
     cursor = connection.cursor()
     cursor.execute(sql_find_simID, (results["simName"], results["username"]))
     records = cursor.fetchall()
     simID = records[0][0]
-    country = records[0][1]
-    sql_insert_Query = "INSERT INTO Datapoints (SimulationID, Year, Country, CO2Emissions) VALUES (%s, %s, %s, %s)"
+    sql_insert_Query = "INSERT INTO Datapoints (SimulationID, Year, CO2Emissions) VALUES (%s, %s, %s)"
     cursor = connection.cursor()
-    cursor.execute(sql_insert_Query, (simID, results["year"], country, results["co2"]))
+    cursor.execute(sql_insert_Query, (simID, results["year"], results["co2"]))
     connection.commit()
     cursor.close()
     return "s"
@@ -107,11 +109,21 @@ def updateSimulation():
 @app.route('/deleteSimulation', methods=['GET', 'POST'])
 def deleteSimulation():
     results = request.get_json()
-    sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = %s AND UserID = %s"
+
     cursor = connection.cursor()
+    sql_getID_query = "SELECT SimulationID FROM Simulation WHERE SimulationName = %s AND UserID = %s"
+    cursor.execute(sql_getID_query, (results["simName"], results["username"]))
+    response = cursor.fetchall()
+    simID = response[0][0]
+
+    sql_delete_Query = "DELETE FROM Simulation WHERE SimulationName = %s AND UserID = %s"
     cursor.execute(sql_delete_Query, (results["simName"], results["username"]))
-    connection.commit()
     cursor.close()
+    connection.commit()
+
+    with driver.session() as session:
+        session.write_transaction(delete_simulation_node, simID)
+
     return "s"
 
 #GET ALL DATAPOINTS ASSOCIATED WITH A SIMULATION NAME AND RETURN RESULTS OF SQL QUERY
@@ -128,7 +140,7 @@ def viewSimulation():
     print(records)
     dataNeeded = []
     for i in range(len(records)):
-        dataNeeded.append([records[i][1], records[i][2], records[i][3]])
+        dataNeeded.append([records[i][5], records[i][1], records[i][2]])
     return jsonify(dataNeeded);
 
 @app.route('/runSimulation', methods=['GET', 'POST'])
@@ -142,10 +154,10 @@ def runSimulation():
         return "fail"
     # print(records)
     startYear = float('inf')
-    country = records[0][1]
+    country = records[0][5]
     userInput, existingData = [], []
     for i in range(len(records)):
-        userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]})
+        userInput.append({"Year": records[i][1], "CO2Emissions": records[i][2]})
     # print(userInput)
     sql_run_Query = "SELECT Year, CO2Emissions FROM RecordedData r JOIN Countries c ON r.CountryCode=c.CountryCode WHERE CountryName = %s"
     cursor.execute(sql_run_Query, (country,))
