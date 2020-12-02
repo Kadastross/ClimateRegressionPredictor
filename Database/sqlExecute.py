@@ -237,7 +237,7 @@ def runSimulation():
 @app.route('/getMapData', methods=['GET', 'POST'])
 def getMapData():
     results = request.get_json()
-    sql_view_Query = "SELECT CountryCode, CO2Emissions FROM RecordedData WHERE Year = '%s'" % (results["yr"])
+    sql_view_Query = "SELECT RecordedData.CountryCode, RecordedData.CO2Emissions, Countries.CountryName, Countries.Population, (RecordedData.CO2Emissions / Countries.Population) FROM RecordedData JOIN Countries ON RecordedData.CountryCode = Countries.CountryCode WHERE RecordedData.Year = '%s'" % (results["yr"])
     cursor = connection.cursor()
     cursor.execute(sql_view_Query)
     records = cursor.fetchall()

@@ -79,8 +79,8 @@ const colorScale = scaleLinear()
                     
                     fill={d ? colorScale(d[1]) : "#F5F4F6"}
                     onClick={() => {
-                        info = d ? d[0] : "Not Recorded";
-                        alert(d ? info + ": " + Number(d[1] / 1000000).toFixed(2) + " million Tons of CO2": "Not Recorded");
+                        info = d ? d[2] : "Not Recorded";
+                        alert(d ? info + ": " + Number(d[1] / 1000000).toFixed(2) + " million Tons of CO2 in total" + " for population of " + Number(d[3]) + "\n \n" + Number(d[4]).toFixed(2) + " Tons of CO2 per capita": "Not Recorded");
                     }}
                   />
                   
