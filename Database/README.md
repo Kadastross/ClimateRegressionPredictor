@@ -1,9 +1,3 @@
-## Dependencies
+## Setting up the databases
 
-You will need: mysql.connector to run this code. You can do this with pip install mysql-connector-python
-
-## Setting up the database
-
-First create a MySQL server on localhost.
-Enter your databases username and password in the dbUser and dbPassword variables in initSQL.py
-run initSQL.py and then importCO2Data.py
+We are using two databases: one in MySQL, and the other in Neo4j. First create a MySQL database, either locally or remotely. Change the MySQL credentials in initSQL.py, importCO2Data.py, and sqlExecute.py to reflect where your database is. Run initSQL.py, followed by importCO2Data.py. Now create a Neo4j database and input the credentials in sqlExecute.py. Run sqlExecute.py. Your application should now be running on both databases.
