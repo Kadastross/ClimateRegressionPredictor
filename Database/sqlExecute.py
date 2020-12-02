@@ -34,7 +34,7 @@ def find_shared_sims(tx, username):
     sharedSims = []
     result = tx.run("MATCH (a:User)-[:WROTE]->(b:Simulation)-[:SHARED_TO]->(c:User {UserID: $user}) RETURN a.UserID AS User, b.Name AS SimName", user=username)
     for record in result:
-        sharedSims.append("%s (%s)".format(record["SimName"], record["User"]))
+        sharedSims.append("{} ({})".format(record["SimName"], record["User"]))
     return sharedSims
 
 def exit_handler():
