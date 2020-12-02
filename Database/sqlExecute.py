@@ -166,7 +166,7 @@ def getYearData():
 #GET LIST OF COUNTRIES FOR DROPDOWN IN FRONT END
 @app.route('/getCountries', methods=['GET'])
 def getCountries():
-    sql_countries_query = "SELECT CountryName FROM Countries"
+    sql_countries_query = "SELECT CountryName FROM Countries ORDER BY CountryName"
     cursor = connection.cursor()
     cursor.execute(sql_countries_query)
     records = cursor.fetchall()
