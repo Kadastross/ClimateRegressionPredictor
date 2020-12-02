@@ -215,7 +215,6 @@ def runSimulation():
 
     linModel = linReg(startYear, userInput, existingData)
     expModel = expReg(startYear, userInput, existingData)
-
     lstmModel = lstm.lstm_forecast_predictions(startYear, userInput, existingData)
 
     retval = {}
@@ -224,6 +223,7 @@ def runSimulation():
     retval['ExistingData'] = existingData
     retval['LinModel'] = linModel
     retval['ExpModel'] = expModel
+    retval['lstmModel'] = lstmModel
     return jsonify(retval);
 
 #GET ALL COUNTRY DATA FOR MAP.

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
-import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
+import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter, VictoryTooltip, VictoryVoronoiContainer, VictoryLegend } from 'victory'
 
 
 
@@ -19,6 +19,7 @@ class LineGraph extends React.Component {
             var userInput = data['UserInput']
             var linModel = data['LinModel']
             var expModel = data['ExpModel']
+            var lstmModel = data['lstmModel']
             console.log(expModel)
         }
 
@@ -31,6 +32,19 @@ class LineGraph extends React.Component {
                 padding={{ top: 10, bottom: 40, left: 80, right: 40 }}
                 containerComponent={<VictoryVoronoiContainer/>}
             >   
+                {Object.keys(data).length != 0 && (
+                <VictoryLegend x={125} y={10}
+                    orientation="horizontal"
+                    gutter={20}
+                    style={{ border: { stroke: "white" }, title: {fontSize: 12 } }}
+                    data={[
+                        { name: "Historical", labels: { fill: "white", fontSize: 12 } , symbol: { size: 2, fill: "cornflowerblue" } },
+                        { name: "User data", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "tomato" } },
+                        { name: "Lin prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "gold" } },
+                        { name: "Exp prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "turquoise" } },
+                        { name: "LSTM prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "violet" } }
+                    ]}
+                />)}
                 {Object.keys(data).length != 0 && (
                 <VictoryScatter 
                     data={userInput} 
@@ -84,6 +98,21 @@ class LineGraph extends React.Component {
                             stroke: "turquoise"
                         }
                     }}
+                    x='Year' 
+                    y='CO2Emissions'
+                    labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
+                    labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.CO2Emissions/1000000)}M`]}
+                    labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
+                />)}
+                {Object.keys(data).length != 0 && (
+                <VictoryScatter
+                    data={lstmModel} 
+                    style={{
+                        data: {
+                            fill: "violet"
+                        }
+                    }}
+                    size = {2}
                     x='Year' 
                     y='CO2Emissions'
                     labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}

@@ -43,7 +43,7 @@ def expReg(startYear, userInput, existingData):
     x = data['Year']
     y = data['CO2Emissions']
 
-    popt, pcov = curve_fit(func, x, y, p0=(1,1e-6,1), maxfev=5000)
+    popt, pcov = curve_fit(func, x, y, p0=(1,1e-6,1), maxfev=10000)
     pred_exp_vals = []
     for year in range(startYear, 2050):
         val = func(year, *popt)
