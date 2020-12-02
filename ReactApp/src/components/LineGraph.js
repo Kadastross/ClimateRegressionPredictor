@@ -105,11 +105,11 @@ class LineGraph extends React.Component {
                     labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
                 />)}
                 {Object.keys(data).length != 0 && (
-                <VictoryScatter
+                <VictoryLine
                     data={lstmModel} 
                     style={{
                         data: {
-                            fill: "violet"
+                            stroke: "violet"
                         }
                     }}
                     size = {2}

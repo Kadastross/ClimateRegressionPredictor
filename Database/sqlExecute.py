@@ -215,6 +215,7 @@ def runSimulation():
 
     linModel = linReg(startYear, userInput, existingData)
     expModel = expReg(startYear, userInput, existingData)
+
     lstmModel = lstm.lstm_forecast_predictions(startYear, userInput, existingData)
 
     retval = {}
@@ -223,7 +224,6 @@ def runSimulation():
     retval['ExistingData'] = existingData
     retval['LinModel'] = linModel
     retval['ExpModel'] = expModel
-    retval['lstmModel'] = lstmModel
     return jsonify(retval);
 
 #GET ALL COUNTRY DATA FOR MAP.
@@ -235,7 +235,7 @@ def getMapData():
     cursor.execute(sql_view_Query)
     records = cursor.fetchall()
     cursor.close()
-    print(records)
+    #print(records)
     return jsonify(records)
 
 #GET ALL SIMULATION NAMES THE USER CREATED.

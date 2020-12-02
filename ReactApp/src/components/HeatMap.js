@@ -14,7 +14,7 @@ const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
 const colorScale = scaleLinear()
-  .domain([0, 10000])
+  .domain([0, 10000000000])
   .range(["#ffcccc", "#ff0000"]);
   
   const HeatMap = (props) => {
@@ -37,9 +37,9 @@ const colorScale = scaleLinear()
 
     return (
         <div>
-            <h4 style={{marginLeft:"20px", color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
+            <h4 style={{marginTop:"15px", marginLeft:"20px", color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
             {/* <ReactTooltip />    */}
-    <h2 style={{marginLeft:"20px",color:"red"}}> Year {props.yr} </h2>
+    <h4 style={{marginLeft:"20px",color:"white"}}> Year {props.yr} </h4>
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
@@ -56,7 +56,7 @@ const colorScale = scaleLinear()
             {({ geographies }) =>
               geographies.map((geo) => {
                 const d = data.find((s) => s[0] === geo.properties.ISO_A3) ; //&& s.Year === props.yr
-                console.log(d? d[1] : "non")
+                //console.log(d? d[1] : "non")
                 return (
                     
                   <Geography
@@ -64,7 +64,7 @@ const colorScale = scaleLinear()
 
                     data-tip={`${
                         d ? d[0] : "Not Recorded"
-                      } ${d ? Number(d[1]).toFixed(2) : ""}`}
+                      } ${d ? (d[1]) : ""}`}
 
                       style={{
                         hover: {
@@ -76,10 +76,11 @@ const colorScale = scaleLinear()
                       }}
                     geography={geo}
                     
+                    
                     fill={d ? colorScale(d[1]) : "#F5F4F6"}
                     onClick={() => {
                         info = d ? d[0] : "Not Recorded";
-                        alert(d ? info + ": " + Number(d[0]) + " million Tons of CO2": "Not Recorded");
+                        alert(d ? info + ": " + Number(d[1] / 1000000).toFixed(2) + " million Tons of CO2": "Not Recorded");
                     }}
                   />
                   

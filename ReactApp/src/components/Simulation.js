@@ -358,7 +358,7 @@ class Simulation extends React.Component {
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
 
-            <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
+            <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.map_year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
                                         <option>Select Year</option>
                                         {this.state.validMapYears.map(map_year => {
                                             return (
