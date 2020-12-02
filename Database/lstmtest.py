@@ -95,5 +95,5 @@ def lstm_forecast_predictions(start_year, user_input, existing_data):
     for i in range(j, len(raw_seq)):
         output.append({"Year": start_year + i, "CO2Emissions": raw_seq[i]})
     
-    #print(output)
+    print(output)
     return output

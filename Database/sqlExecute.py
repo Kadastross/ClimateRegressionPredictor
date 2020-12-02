@@ -186,7 +186,7 @@ def viewSimulation():
     dataNeeded = []
     for i in range(len(records)):
         dataNeeded.append([records[i][5], records[i][1], records[i][2]])
-    return jsonify(dataNeeded);
+    return jsonify(dataNeeded)
 
 #PERFORM MODELING FOR GRAPH
 @app.route('/runSimulation', methods=['GET', 'POST'])
@@ -224,6 +224,7 @@ def runSimulation():
     retval['ExistingData'] = existingData
     retval['LinModel'] = linModel
     retval['ExpModel'] = expModel
+    retval['lstmModel'] = lstmModel
     return jsonify(retval);
 
 #GET ALL COUNTRY DATA FOR MAP.
