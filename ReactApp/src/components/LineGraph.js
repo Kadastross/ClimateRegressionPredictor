@@ -41,9 +41,9 @@ class LineGraph extends React.Component {
                     data={[
                         { name: "Historical", labels: { fill: "white", fontSize: 12 } , symbol: { size: 2, fill: "cornflowerblue" } },
                         { name: "User data", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "tomato" } },
-                        { name: "Lin prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "gold" } },
-                        { name: "Exp prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "turquoise" } },
-                        { name: "LSTM prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 2, fill: "violet" } }
+                        { name: "Lin prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 3, fill: "gold", type: "minus" } },
+                        { name: "Exp prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 3, fill: "turquoise", type: "minus" } },
+                        { name: "LSTM prediction", labels: { fill: "white", fontSize: 12 }, symbol: {  size: 3, fill: "violet", type: "minus" } }
                     ]}
                 />)}
                 {Object.keys(data).length != 0 && (
