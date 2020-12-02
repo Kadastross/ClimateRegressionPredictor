@@ -69,6 +69,7 @@ class LogIn extends React.Component {
             <div className="Main-Background">
                 <Card style={{marginTop:"17%", marginLeft: "35%", width: '25rem'}}>
                     <Card.Body>
+                        <h3>Modeling Climate Change</h3>
                         <Card.Title>Log In</Card.Title>
                         <Card.Text>
                             <Form>

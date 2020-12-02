@@ -204,7 +204,10 @@ class Share extends React.Component {
                 </CardDeck>
                 <div style = {{marginTop:"30px"}} >
                     {this.state.successViewShare == "true" && 
-                        <LineGraph data={this.state.runData}></LineGraph>
+                        <div>
+                            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>{this.state.userView}'s Co2 Emissions Graph</h2>
+                            <LineGraph data={this.state.runData}></LineGraph>
+                        </div>
                     }
                 </div>
             </div>

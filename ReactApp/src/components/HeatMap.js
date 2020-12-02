@@ -35,7 +35,7 @@ const colorScale = scaleLinear()
 
     return (
         <div>
-            <h4 style={{color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
+            <h4 style={{marginLeft:"20px", color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
             {/* <ReactTooltip />    */}
       <ComposableMap
         projectionConfig={{

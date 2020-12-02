@@ -305,8 +305,14 @@ class Simulation extends React.Component {
         }     
         return (
         <div className="Sim-Background">
-            <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
-            <Button style = {{marginLeft:"20px"}} onClick = {this.logOut}>Log Out</Button>
+            <div class="row">
+                <div class="col-sm-10 col-12">
+                    <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
+                </div>
+                <div class="col-sm-2 col-12">
+                    <Button style = {{marginLeft:"50px"}} variant="danger" onClick = {this.logOut}>Log Out</Button>
+                </div>
+            </div>
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
@@ -466,9 +472,11 @@ class Simulation extends React.Component {
                     </Card.Body>
                 </Card>
                 </CardDeck>
-                <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
                 {this.state.successRun=="true" &&
+                    <div>
+                    <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
                     <LineGraph data={this.state.runData}></LineGraph>
+                    </div>
                 }
                 <Share />
                 <h1 style={{color:"black"}}>xyz</h1>
