@@ -126,6 +126,10 @@ class Share extends React.Component {
         })
         .catch((error) => {
             console.log(error)
+            this.setState({successViewShare: "false"});
+            setTimeout(function(){
+                this.setState({successViewShare: "x"});
+           }.bind(this),8000);
         })
     }
 
@@ -210,6 +214,11 @@ class Share extends React.Component {
                             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>{this.state.userView}'s Co2 Emissions Graph</h2>
                             <LineGraph data={this.state.runData}></LineGraph>
                         </div>
+                    }
+                    {this.state.successViewShare == "false" && 
+                            <div class="alert alert-danger" role="alert" style={{marginTop:"30px"}}>
+                                Graph Failed! Please Contact the User of the Simulation.
+                            </div>
                     }
                     {this.state.successViewShare == "" && 
                         <div>

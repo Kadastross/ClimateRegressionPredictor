@@ -314,7 +314,7 @@ class Simulation extends React.Component {
             console.log(error)
             this.setState({successRun:"false"})
             setTimeout(function(){
-                this.setState({successRun:""});
+                this.setState({successRun:"x"});
            }.bind(this),8000);
         })
     }
@@ -371,6 +371,9 @@ class Simulation extends React.Component {
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#Create">Create Simulation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#View">View CO2 Emissions Graph</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#Share">Share Simulation</a>
@@ -562,13 +565,15 @@ class Simulation extends React.Component {
                 </CardDeck>
                 {this.state.successRun=="true" &&
                     <div>
+                    <ScrollableAnchor id="View">
                     <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
+                    </ScrollableAnchor>
                     <LineGraph data={this.state.runData}></LineGraph>
                     </div>
                 }
                 {this.state.successRun == "false" && 
                         <div class="alert alert-danger" role="alert" style={{marginTop:"30px"}}>
-                            {this.state.userView}You have entered a value that is too high. Please update and lower CO2 Emissions Levels!
+                            Graph Failed! Your simulation either have no data points or you have entered a CO2 Emissions value that is too high. Please update and try again.
                         </div>
                 }
                 {this.state.successRun == "" && 
