@@ -34,8 +34,8 @@ def find_shared_sims(tx, username):
     sharedSims = []
     result = tx.run("MATCH (a:User)-[:WROTE]->(b:Simulation)-[:SHARED_TO]->(c:User {UserID: $user}) RETURN a.UserID AS User, b.Name AS SimName", user=username)
     for record in result:
-        sharedSims.append("{} ({})".format(record["SimName"], record["User"]))
-    return sharedSims
+        sharedSims.append("{} {}".format(record["SimName"], record["User"]))
+    return jsonify(sharedSims)
 
 def exit_handler():
     connection.close()
@@ -187,6 +187,7 @@ def viewSimulation():
         dataNeeded.append([records[i][5], records[i][1], records[i][2]])
     return jsonify(dataNeeded);
 
+#PERFORM MODELING FOR GRAPH
 @app.route('/runSimulation', methods=['GET', 'POST'])
 def runSimulation():
     results = request.get_json()
@@ -196,12 +197,11 @@ def runSimulation():
     records = cursor.fetchall()
     if (len(records) == 0):
         return "fail"
-    # print(records)
     startYear = float('inf')
     country = records[0][5]
     userInput, existingData = [], []
     for i in range(len(records)):
-        userInput.append({"Year": records[i][1], "CO2Emissions": records[i][2]})
+        userInput.append({"Year": records[i][1], "CO2Emissions": records[i][2]*1000000})
     # print(userInput)
     sql_run_Query = "SELECT Year, CO2Emissions FROM RecordedData r JOIN Countries c ON r.CountryCode=c.CountryCode WHERE CountryName = %s"
     cursor.execute(sql_run_Query, (country,))
