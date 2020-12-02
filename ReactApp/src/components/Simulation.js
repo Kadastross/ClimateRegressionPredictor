@@ -34,7 +34,8 @@ class Simulation extends React.Component {
             deleteSimResult: "",
             addDataResult: "",
             validInputYears: [],
-            validLogin: ""
+            validLogin: "",
+            successRun: ""
         }
     }
 
@@ -145,6 +146,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({addDataResult: "true"})
+                setTimeout(function(){
+                    this.setState({addDataResult:""});
+               }.bind(this),5000);
             }
         })
         .catch((error) => {
@@ -171,7 +175,9 @@ class Simulation extends React.Component {
                 if (data === "s") {
                     this.setState({createSimResult: "true"})
                 }
-                console.log(data)
+                setTimeout(function(){
+                    this.setState({createSimResult:""});
+               }.bind(this),5000);
         })
         .catch((error) => {
             console.log(error)
@@ -197,6 +203,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({updateSimResult: "true"})
+                setTimeout(function(){
+                    this.setState({updateSimResult:""});
+               }.bind(this),5000);
             }
         })
         .catch((error) => {
@@ -249,7 +258,7 @@ class Simulation extends React.Component {
                 this.setState({simIDFound:"false"})
             } else {
                 // ls.set('modelData', data)
-                this.setState({runData: data})
+                this.setState({runData: data, successRun:"true"})
             }
         })
         .catch((error) => {
@@ -274,6 +283,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({deleteSimResult: "true"})
+                setTimeout(function(){
+                    this.setState({deleteSimResult:""});
+               }.bind(this),5000);
             }
 
         })
@@ -298,8 +310,6 @@ class Simulation extends React.Component {
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
-            <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
-            <LineGraph data={this.state.runData}></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>
@@ -456,6 +466,10 @@ class Simulation extends React.Component {
                     </Card.Body>
                 </Card>
                 </CardDeck>
+                <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
+                {this.state.successRun=="true" &&
+                    <LineGraph data={this.state.runData}></LineGraph>
+                }
                 <Share />
                 <h1 style={{color:"black"}}>xyz</h1>
         </div>

@@ -24,7 +24,8 @@ class Share extends React.Component {
             successShare: "",
             allSimSharedWithUser: [],
             displayOnViewSim: "",
-            runData: {}
+            runData: {},
+            successViewShare: ""
         }
     }
 
@@ -50,8 +51,14 @@ class Share extends React.Component {
         .then((data) => {
             if (data === "1") {
                 this.setState({successShare: "true"})
+                setTimeout(function(){
+                    this.setState({successShare:""});
+               }.bind(this),5000);
             } else {
                 this.setState({successShare: "false"})
+                setTimeout(function(){
+                    this.setState({successShare:""});
+               }.bind(this),5000);
             }    
         })
         .catch((error) => {
@@ -113,7 +120,7 @@ class Share extends React.Component {
                 this.setState({simIDFound:"false"})
             } else {
                 // ls.set('modelData', data)
-                this.setState({runData: data})
+                this.setState({runData: data, successViewShare: "true"})
             }
         })
         .catch((error) => {
@@ -164,12 +171,12 @@ class Share extends React.Component {
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.share}>Share Simulation</Button>
                                 {this.state.successShare == "false" && 
                                     <div>
-                                        <Form.Text style={{marginTop:"20px"}}>This User Does Not Exist.</Form.Text>
+                                        <Card.Text style={{marginTop:"20px"}}>This User Does Not Exist.</Card.Text>
                                     </div>
                                 }
                                 {this.state.successShare == "true" && 
                                     <div>
-                                        <Form.Text style={{marginTop:"20px"}}>Simulation Shared Successfully!</Form.Text>
+                                        <Card.Text style={{marginTop:"20px"}}>Simulation Shared Successfully!</Card.Text>
                                     </div>
                                 }
                             </Form>
@@ -189,14 +196,16 @@ class Share extends React.Component {
                                             )
                                     })}
                                 </select>
-                                <Button style={{marginTop:"20px"}} variant="danger" onClick={this.run}>View a Shared Simulation</Button>
+                                <Button style={{marginTop:"20px"}} variant="danger" onClick={this.run}>Run a Shared Simulation</Button>
                             </Form>
                         </Card.Text>
                     </Card.Body>
                 </Card>
                 </CardDeck>
                 <div style = {{marginTop:"30px"}} >
-                    <LineGraph data={this.state.runData}></LineGraph>
+                    {this.state.successViewShare == "true" && 
+                        <LineGraph data={this.state.runData}></LineGraph>
+                    }
                 </div>
             </div>
         )
