@@ -27,8 +27,15 @@ def create_simulation_node(tx, name, simID, simulationName):
 def delete_simulation_node(tx, simID):
     tx.run("MATCH (a:Simulation {SimulationID:$id}) DETACH DELETE a", id=simID)
 
-def shared_to_relationship(tx, userA, userB):
-    print('placeholder')
+def shared_to_relationship(tx, userA, userB, simID):
+    tx.run("MATCH (s:Simulation {SimulationID:$id}) MATCH (u:User {UserID: $user}) CREATE (s)-[:SHARED_TO]->(u)", id=simID, user=userB)
+
+def find_shared_sims(tx, username):
+    sharedSims = []
+    result = tx.run("MATCH (a:User)-[:WROTE]->(b:Simulation)-[:SHARED_TO]->(c:User {UserID: $user}) RETURN a.UserID AS User, b.Name AS SimName", user=username)
+    for record in result:
+        sharedSims.append("{} ({})".format(record["SimName"], record["User"]))
+    return sharedSims
 
 def exit_handler():
     connection.close()
@@ -52,9 +59,46 @@ userID = ""
 #     return str(records[0][0])
 
 
-
+#CHECK IF USER EXISTS:
+def existsUser(user):
+    sql_login_query = "SELECT count(*) FROM User WHERE UserID = '%s'" % (user)
+    cursor = connection.cursor()
+    cursor.execute(sql_login_query)
+    records = cursor.fetchall()
+    cursor.close()
+    return records[0][0]
 
 @app.route('/')
+
+@app.route('/findSharedSimulations', methods=['GET', 'POST'])
+def findSharedSimulations():
+    results = request.get_json()
+    sharedSims = []
+    with driver.session() as session:
+        sharedSims = session.read_transaction(find_shared_sims, results["username"])
+
+    print(sharedSims)
+    return sharedSims
+
+@app.route('/shareSimulations', methods=['GET', 'POST'])
+def shareSimulations():
+    results = request.get_json()
+
+    if not existsUser(results["userShare"]):
+        return '0'
+
+    cursor = connection.cursor()
+    sql_getID_query = "SELECT SimulationID FROM Simulation WHERE SimulationName = %s AND UserID = %s"
+    cursor.execute(sql_getID_query, (results["simShare"], results["username"]))
+    response = cursor.fetchall()
+    cursor.close()
+    simID = response[0][0]
+
+    with driver.session() as session:
+        session.write_transaction(shared_to_relationship, results["username"], results["userShare"], simID)
+
+    return '1'
+
 
 #CREATE A NEW SIMULATION (ADD TO SIMULATION TABLE)
 @app.route('/createSimulation', methods=['GET', 'POST'])
@@ -209,14 +253,6 @@ def getCountries():
     cursor.close()
     return jsonify(records)
 
-#CHECK IF USER EXISTS:
-def existsUser(user):
-    sql_login_query = "SELECT count(*) FROM User WHERE UserID = '%s'" % (user)
-    cursor = connection.cursor()
-    cursor.execute(sql_login_query)
-    records = cursor.fetchall()
-    cursor.close()
-    return records[0][0]
 
 #SIGN UP
 @app.route('/signUp', methods=['GET', 'POST'])
