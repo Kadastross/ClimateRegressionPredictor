@@ -46,19 +46,6 @@ atexit.register(exit_handler)
 app = Flask(__name__)
 CORS(app)
 
-#global variables
-userID = ""
-
-#FIGURING OUT IF TUPLE EXISTS IN DATABASE:
-# def simExists(simName, userID):
-#     sql_login_query = "SELECT count(*) FROM Simulation WHERE UserID = %s AND Password = %s"
-#     cursor = connection.cursor()
-#     cursor.execute(sql_login_query, (results["username"], results["password"]))
-#     records = cursor.fetchall()
-#     cursor.close()
-#     print(records[0][0])
-#     return str(records[0][0])
-
 #CHECK IF USER EXISTS:
 def existsUser(user):
     sql_login_query = "SELECT count(*) FROM User WHERE UserID = '%s'" % (user)
@@ -310,11 +297,6 @@ def logIn():
     cursor.close()
     print(records[0][0])
     return str(records[0][0])
-
-@app.route('/getUserID', methods=['GET'])
-def getUserID():
-    print("USER: ", userID)
-    return userID
 
 if __name__ == "__main__":
     app.run()
