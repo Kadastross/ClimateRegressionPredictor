@@ -37,7 +37,8 @@ class Simulation extends React.Component {
             validMapYears: [],
             map_year: -1,
             mapData: {},
-            validLogin: ""
+            validLogin: "",
+            successRun: ""
         }
     }
 
@@ -108,7 +109,7 @@ class Simulation extends React.Component {
     getInputYearDropdown = () => {
         var validYears = []
         for (let i = 2020; i < 2050; i++) {
-            validYears.push(i)
+                validYears.push(i)
         }
         this.setState({validInputYears: validYears})
     }
@@ -187,6 +188,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({addDataResult: "true"})
+                setTimeout(function(){
+                    this.setState({addDataResult:""});
+               }.bind(this),5000);
             }
         })
         .catch((error) => {
@@ -213,7 +217,9 @@ class Simulation extends React.Component {
                 if (data === "s") {
                     this.setState({createSimResult: "true"})
                 }
-                console.log(data)
+                setTimeout(function(){
+                    this.setState({createSimResult:""});
+               }.bind(this),5000);
         })
         .catch((error) => {
             console.log(error)
@@ -239,6 +245,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({updateSimResult: "true"})
+                setTimeout(function(){
+                    this.setState({updateSimResult:""});
+               }.bind(this),5000);
             }
         })
         .catch((error) => {
@@ -291,7 +300,7 @@ class Simulation extends React.Component {
                 this.setState({simIDFound:"false"})
             } else {
                 // ls.set('modelData', data)
-                this.setState({runData: data})
+                this.setState({runData: data, successRun:"true"})
             }
         })
         .catch((error) => {
@@ -316,6 +325,9 @@ class Simulation extends React.Component {
         .then((data) => {
             if (data === "s") {
                 this.setState({deleteSimResult: "true"})
+                setTimeout(function(){
+                    this.setState({deleteSimResult:""});
+               }.bind(this),5000);
             }
 
         })
@@ -335,8 +347,14 @@ class Simulation extends React.Component {
         }     
         return (
         <div className="Sim-Background">
-            <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
-            <Button style = {{marginLeft:"20px"}} onClick = {this.logOut}>Log Out</Button>
+            <div class="row">
+                <div class="col-sm-10 col-12">
+                    <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
+                </div>
+                <div class="col-sm-2 col-12">
+                    <Button style = {{marginLeft:"50px"}} variant="danger" onClick = {this.logOut}>Log Out</Button>
+                </div>
+            </div>
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
 
@@ -348,7 +366,7 @@ class Simulation extends React.Component {
                                             )
                                             })}
             </select>
-
+            <Button style ={{marginTop:"20px", marginLeft:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
             <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
 
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
@@ -404,7 +422,7 @@ class Simulation extends React.Component {
                                             )
                                             })}
                                     </select>
-                                    <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions</Form.Label>
+                                    <Form.Label style={{marginTop:"20px"}}>Enter CO2 Emissions (Millions of Tons)</Form.Label>
                                     <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                     <Button style={{marginTop:"20px"}} variant="danger" onClick={this.addNewDataPoint}>Add Data Point</Button>
                                     {this.state.addDataResult === "true" && 
@@ -438,7 +456,7 @@ class Simulation extends React.Component {
                                             )
                                             })}
                                     </select>
-                                <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions</Form.Label>
+                                <Form.Label style={{marginTop:"20px"}}>Enter New CO2 Emissions (Millions of Tons)</Form.Label>
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.update}>Update Data Points</Button>
                                 {this.state.updateSimResult === "true" && 
@@ -509,6 +527,12 @@ class Simulation extends React.Component {
                     </Card.Body>
                 </Card>
                 </CardDeck>
+                {this.state.successRun=="true" &&
+                    <div>
+                    <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
+                    <LineGraph data={this.state.runData}></LineGraph>
+                    </div>
+                }
                 <Share />
                 <h1 style={{color:"black"}}>xyz</h1>
         </div>
