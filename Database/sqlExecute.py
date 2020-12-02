@@ -36,9 +36,6 @@ userID = ""
 #     print(records[0][0])
 #     return str(records[0][0])
 
-
-
-
 @app.route('/')
 
 #CREATE A NEW SIMULATION (ADD TO SIMULATION TABLE)
@@ -143,6 +140,17 @@ def runSimulation():
     retval['LinModel'] = linModel
     retval['ExpModel'] = expModel
     return jsonify(retval);
+
+#GET ALL COUNTRY DATA FOR MAP.
+@app.route('/getMapData', methods=['GET', 'POST'])
+def getMapData():
+    results = request.get_json()
+    sql_view_Query = "SELECT CountryCode FROM RecordedData WHERE Year = '%s'" % (results["yr"])
+    cursor = connection.cursor()
+    cursor.execute(sql_view_Query)
+    records = cursor.fetchall()
+    cursor.close()
+    return jsonify(records)
 
 #GET ALL SIMULATION NAMES THE USER CREATED.
 @app.route('/getSimulationNames', methods=['GET', 'POST'])

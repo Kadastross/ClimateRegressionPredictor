@@ -34,6 +34,9 @@ class Simulation extends React.Component {
             deleteSimResult: "",
             addDataResult: "",
             validInputYears: [],
+            validMapYears: [],
+            map_year: -1,
+            mapData: {},
             validLogin: ""
         }
     }
@@ -110,12 +113,51 @@ class Simulation extends React.Component {
         this.setState({validInputYears: validYears})
     }
 
+    getMapYearDropdown = () => {
+        var validYears = []
+        for (let i = 1751; i < 2018; i++) {
+            validYears.push(i)
+        }
+        this.setState({validMapYears: validYears})
+    }
+
+    getMapData = () => {
+        console.log("map")
+        var data = {
+            "yr": this.state.map_year,
+        }
+        fetch('http://127.0.0.1:5000/getMapData' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+            console.log(data)
+            if (data === "fail") {
+                this.setState({simIDFound:"false"})
+            } else {
+                // ls.set('modelData', data)
+                this.setState({mapData: data})
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
     changeSimId = (e) => {
         this.setState({simID: e.target.value})
     }
 
     changeYear = (e) => {
         this.setState({year: e.target.value})
+    }
+
+    changeMapYear = (e) => {
+        this.setState({map_year: e.target.value})
     }
 
     changeCo2 = (e) => {
@@ -297,7 +339,18 @@ class Simulation extends React.Component {
             <Button style = {{marginLeft:"20px"}} onClick = {this.logOut}>Log Out</Button>
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
-            <HeatMap></HeatMap>
+
+            <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
+                                        <option>Select Year</option>
+                                        {this.state.validMapYears.map(map_year => {
+                                            return (
+                                                <option value = {map_year}> {map_year} </option>
+                                            )
+                                            })}
+            </select>
+
+            <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
+
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
             <LineGraph data={this.state.runData}></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>

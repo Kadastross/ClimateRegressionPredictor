@@ -18,16 +18,17 @@ const colorScale = scaleLinear()
   .range(["#ffcccc", "#ff0000"]);
   
   const HeatMap = (props) => {
-      
+    //super(props);
+    console.log(props.yr);
     const [data, setData] = useState([]);
     useEffect(() => {
         ReactTooltip.rebuild();
     });
     
     useEffect(() => {
-      csv('./data/annual-co2-emissions-per-country.csv').then((data) => {
-        setData(data);
-      });
+      
+        setData(props.map_data);
+      
     }, []);
 
     console.log(data);
@@ -35,8 +36,9 @@ const colorScale = scaleLinear()
 
     return (
         <div>
-            <h4 style={{color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
+            <h4 style={{marginLeft:"20px",color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
             {/* <ReactTooltip />    */}
+    <h2 style={{marginLeft:"20px",color:"blue"}}> Year {props.yr} </h2>
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
@@ -52,7 +54,7 @@ const colorScale = scaleLinear()
           <Geographies geography={geoUrl}>
             {({ geographies }) =>
               geographies.map((geo) => {
-                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === "2017") ;
+                const d = data.find((s) => s.Code === geo.properties.ISO_A3 && s.Year === props.yr) ;
                 return (
                     
                   <Geography
@@ -75,7 +77,7 @@ const colorScale = scaleLinear()
                     fill={d ? colorScale(d["Annual CO2 emissions"]) : "#F5F4F6"}
                     onClick={() => {
                         info = d ? d["Entity"] : "Not Recorded";
-                        alert(d ? info + ": " + Number(d["Annual CO2 emissions"]).toFixed(2) + " million Tons of CO2": "Not Recorded");
+                        alert(d ? info + ": " + Number(d["Annual CO2 emissions"]) + " million Tons of CO2": "Not Recorded");
                     }}
                   />
                   
