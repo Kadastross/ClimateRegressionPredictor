@@ -1,6 +1,7 @@
 # RUN: PIP INSTALL TENSORFLOW 
 #imports:
 from numpy import array
+import math
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dense
@@ -84,7 +85,9 @@ def lstm_forecast_predictions(start_year, user_input, existing_data):
 
         pred = yhat.tolist()
         for element in pred[0]:
-            raw_seq.append(element[0])
+            if not math.isnan(element[0]):
+                raw_seq.append(element[0])
+            
         #raw_seq.append(pred) #append prediction
     output = []
 
@@ -93,7 +96,10 @@ def lstm_forecast_predictions(start_year, user_input, existing_data):
 
     j = last_yr - start_year
     for i in range(j, len(raw_seq)):
-        output.append({"Year": start_year + i, "CO2Emissions": raw_seq[i]})
+        if raw_seq[i]:
+           output.append({"Year": start_year + i, "CO2Emissions": int(raw_seq[i])})
+        else:
+            output.append({"Year": start_year + i, "CO2Emissions": 0}) 
     
     print(output)
     return output

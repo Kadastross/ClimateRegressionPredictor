@@ -40,6 +40,7 @@ const colorScale = scaleLinear()
             <h4 style={{marginTop:"15px", marginLeft:"20px", color:"white"}}>Click on the countries to see their CO2 emissions per capita</h4>
             {/* <ReactTooltip />    */}
     <h4 style={{marginLeft:"20px",color:"white"}}> Year {props.yr} </h4>
+    <h6 style={{marginLeft:"20px",color:"white"}}> darker red = higher emissions</h6>
       <ComposableMap
         projectionConfig={{
           rotate: [-10, 0, 0],
