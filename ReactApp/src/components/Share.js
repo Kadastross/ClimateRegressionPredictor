@@ -25,7 +25,7 @@ class Share extends React.Component {
             allSimSharedWithUser: [],
             displayOnViewSim: "",
             runData: {},
-            successViewShare: ""
+            successViewShare: "x"
         }
     }
 
