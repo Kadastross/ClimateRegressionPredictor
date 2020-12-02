@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './Simulation.css'
 import 'bootstrap/dist/css/bootstrap.css';
-import Button from 'react-bootstrap/Button';
-import { csv } from 'd3-fetch'
 import { VictoryLine, VictoryChart, VictoryAxis, VictoryScatter, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
-import { color } from 'd3';
-import ls from 'local-storage'
+
 
 
 class LineGraph extends React.Component {
@@ -15,38 +12,14 @@ class LineGraph extends React.Component {
         }
     }
 
-    // filterData = (data, country) => {
-    //     const d = [];
-    //     for(var i=0; i<data.length; i++){
-    //         if (data[i]['Code'] == country) {
-    //             d.push({"Year": data[i]['Year'], "Emissions": data[i]['Annual CO2 emissions']*1000000});
-    //         }
-    //     }
-    //     return d;
-    // }
-
-    scaleData = (data) => {
-        for(var i=0; i<data.length; i++){
-            data[i]["CO2Emissions"] *= 1000000
-        }
-        return data;
-    }
-
     render() {
-        // const [data, setData] = useState([]);
-        // useEffect(() => {
-        //     csv('./data/annual-co2-emissions-per-country.csv').then((data) => {
-        //         setData(data);
-        //     });
-        // }, []);
         var data = this.props.data
         if (Object.keys(data).length != 0) {
             var existingData = data['ExistingData']
-            // var userInput = this.scaleData(data['UserInput'])
             var userInput = data['UserInput']
-            console.log(userInput)
             var linModel = data['LinModel']
             var expModel = data['ExpModel']
+            console.log(expModel)
         }
 
         return (
@@ -84,7 +57,6 @@ class LineGraph extends React.Component {
                     }}
                     x='Year' 
                     y='CO2Emissions'
-                    // labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
                     labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.CO2Emissions/1000000)}M`]}
                     labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
                     size={({ active }) => active ? 5 : 2}
@@ -100,10 +72,23 @@ class LineGraph extends React.Component {
                     }}
                     x='Year' 
                     y='CO2Emissions'
-                    // labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
-                    // labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.Emissions/1000000)}M`]}
-                    // labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
-                    // size={({ active }) => active ? 2 : 1}
+                    labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
+                    labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.CO2Emissions/1000000)}M`]}
+                    labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
+                />)}
+                {Object.keys(data).length != 0 && (
+                <VictoryLine
+                    data={expModel} 
+                    style={{
+                        data: {
+                            stroke: "turquoise"
+                        }
+                    }}
+                    x='Year' 
+                    y='CO2Emissions'
+                    labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
+                    labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.CO2Emissions/1000000)}M`]}
+                    labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
                 />)}
                 {Object.keys(data).length != 0 && (
                 <VictoryAxis
