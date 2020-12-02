@@ -19,7 +19,10 @@ class Share extends React.Component {
             userShare: "",
             userID: "",
             simShare: "",
-            successShare: ""
+            simView: "",
+            userView: "",
+            successShare: "",
+            allSimSharedWithUser: []
         }
     }
 
@@ -32,7 +35,7 @@ class Share extends React.Component {
         var data = {
             "username":this.state.userID,
             "userShare": this.state.userShare,
-            "simShare": this.state.userShare
+            "simShare": this.state.simShare
         }
         fetch('http://127.0.0.1:5000/shareSimulations' , {
             headers: {
@@ -83,11 +86,15 @@ class Share extends React.Component {
         this.setState({simShare: e.target.value})
     }
 
+    changeSimView = (e) => {
+        this.setState({simView: e.target.value})
+    }
+
     run = () => {
         console.log("run")
         var data = {
-            "simName": this.state.simID,
-            "username": this.state.userID
+            "simName": this.state.simView,
+            "username": this.state.userView
         }
         fetch('http://127.0.0.1:5000/runSimulation' , {
             headers: {
@@ -105,6 +112,26 @@ class Share extends React.Component {
                 // ls.set('modelData', data)
                 this.setState({runData: data})
             }
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+
+    getAllSimSharedWithYou = () => {
+        var data = {
+            "username": this.state.userID
+        }
+        fetch('http://127.0.0.1:5000/findSharedSimulations' , {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then((data) => {
+            this.setState({allSimSharedWithUser: data})
         })
         .catch((error) => {
             console.log(error)
@@ -151,13 +178,13 @@ class Share extends React.Component {
                         <Card.Title>View a Simulation That was Shared To You</Card.Title>
                         <Card.Text>
                             <Form>
-                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1">
+                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.simView} onClick = {this.getAllSimSharedWithYou} onChange={this.changeSimView}>
                                     <option>Select Simulation To View</option>
-                                    {/* {this.state.simulationNameList.map(sim => {
+                                    {this.state.allSimSharedWithUser.map(sim => {
                                             return (
                                                 <option value = {sim}> {sim} </option>
                                             )
-                                    })} */}
+                                    })}
                                 </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.run}>View a Shared Simulation</Button>
                             </Form>
