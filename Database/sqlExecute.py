@@ -1,4 +1,4 @@
-import mysql.connector, atexit, csv
+import mysql.connector, atexit, csv, neo4j
 from mysql.connector import Error
 from flask import Flask, render_template, request, redirect, flash, url_for, jsonify
 from flask_cors import CORS
@@ -7,17 +7,29 @@ from basicRegs import linReg, expReg
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379236"
-dbPassword = "Ax3afA2tkU"
+dbUser = "sql9379669"
+dbPassword = "LGGlMtRGdY"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379236",
+                                    database = "sql9379669",
                                     auth_plugin = 'mysql_native_password')
+
+driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "KtTJdqBc6jzeNze4"))
+
+def create_user_node(tx, name):
+    tx.run("CREATE (a:`User` { `UserID`: $user }) RETURN a", user=name)
+
+def create_simulation_node(tx, name, simID):
+    tx.run("MATCH (a:User {UserID: $user}) CREATE (a)-[:WROTE]->(b:Simulation {SimulationID: $id})", user=name, id=simID)
+
+def shared_to_relationship(tx, userA, userB):
+    print('placeholder')
 
 def exit_handler():
     connection.close()
+    driver.close()
 
 atexit.register(exit_handler)
 app = Flask(__name__)
@@ -51,7 +63,16 @@ def createSimulation():
     print(results)
     cursor.execute(sql_insert_Query, (results["simName"], results["username"], results["country"]))
     connection.commit()
+
+    sql_getID_query = "SELECT SimulationID FROM Simulation WHERE SimulationName = %s AND UserID = %s AND Country = %s"
+    cursor.execute(sql_getID_query, (results["simName"], results["username"], results["country"]))
+    response = cursor.fetchall()
     cursor.close()
+    simID = response[0][0]
+
+    with driver.session() as session:
+        session.write_transaction(create_simulation_node, results["username"], simID)
+
     return "s"
 
 #ADD NEW DATA POINT (ADD TO DATAPOINTS TABLE)
@@ -184,6 +205,7 @@ def existsUser(user):
     records = cursor.fetchall()
     cursor.close()
     return records[0][0]
+
 #SIGN UP
 @app.route('/signUp', methods=['GET', 'POST'])
 def createUser():
@@ -199,6 +221,10 @@ def createUser():
     connection.commit()
     cursor.close()
     userID = results["userID"]
+
+    with driver.session() as session:
+        session.write_transaction(create_user_node, userID)
+
     return userID
 
 #LOGIN
