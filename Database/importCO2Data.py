@@ -2,48 +2,15 @@
 
 !!!!!!! PLEASE READ !!!!!!!
 
-This file is only run one time in order to initialize the MongoDB database with the CO2 Emissions Data
+This file is only run one time in order to initialize the MySQL database with the CO2 Emissions Data
 
 '''
-
-import csv
-import pymongo
-
-countryCodeMap = {}
-
-with open('annual-co2-emissions-per-country.csv') as co2_data:
-    csv_reader = csv.reader(co2_data, delimiter=',')
-    next(csv_reader)
-    for row in csv_reader:
-        countryCodeMap[row[0]] = row[1]
-
-myclient = pymongo.MongoClient("mongodb+srv://cs411group40:cs411group40@cluster0.gydem.mongodb.net/<dbname>?retryWrites=true&w=majority")
-EmissionsData = myclient['EmissionsData']
-CO2Emissions = EmissionsData['CO2EmissionsCode']
-
-with open('co2_emissions.csv') as co2_data:
-    csv_reader = csv.reader(co2_data, delimiter=',')
-    next(csv_reader) # skip first line
-    for row in csv_reader:
-        if len(row[0].strip()) is 0 or len(row[1].strip()) is 0 or len(row[2].strip()) is 0 or len(row[8].strip()) is 0:
-            continue
-        print("Country:", row[0])
-        print("Year:", int(row[1]))
-        print("AnnualCO2Emissions:", float(row[2]) * 1000000) # million tons
-        print("AnnualCO2EmissionsPerCapita:", float(row[8]) * 1000000000000) # tons
-        toInsert = {"Country": row[0], "Country Code": countryCodeMap[row[0]], "Year": int(row[1]), "AnnualCO2Emissions": float(row[2]) * 1000000, "AnnualCO2EmissionsPerCapita": float(row[8]) * 1000000000000}
-        x = CO2Emissions.insert_one(toInsert)
-
-myclient.close()
-
-'''
-
-import mysql.connector
+import csv, mysql.connector
 
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379184"
-dbPassword = "RKBNi5PlkS"
-dbName = 'sql9379139'
+dbUser = "sql9379236"
+dbPassword = "Ax3afA2tkU"
+dbName = 'sql9379236'
 
 db = mysql.connector.connect(host = dbIP,
                                      user = dbUser,
@@ -52,18 +19,22 @@ db = mysql.connector.connect(host = dbIP,
                                      auth_plugin = 'mysql_native_password')
 
 cursor = db.cursor()
-with open('co2_emissions.csv') as co2_data:
+countryCode = {}
+with open('Countries_Data.csv') as co2_data:
     csv_reader = csv.reader(co2_data, delimiter=',')
     next(csv_reader) # skip first line
     for row in csv_reader:
         if len(row[0].strip()) is 0 or len(row[1].strip()) is 0 or len(row[2].strip()) is 0 or len(row[8].strip()) is 0:
             continue
         print("Country:", row[0])
+        print("CountryCode:", row[16])
         print("Year", int(row[1]))
-        print("AnnualCO2Emissions", float(row[2]) * 1000000) # million tons
-        print("AnnualCO2EmissionsPerCapita:", float(row[8]) * 1000000000000) # tons
-        cursor.execute('INSERT INTO CO2_Emissions(Country, Year, AnnualCO2Emissions, AnnualCO2EmissionsPerCapita)' \
-                       'VALUES("%s", "%s", "%s", "%s")', (row[0], int(row[1]), float(row[2]), float(row[8])))
+        print("AnnualCO2Emissions", float(row[2]) * 1000000)
+        print("Population:", int(float(row[17])))
+        if not row[16] in countryCode:
+            cursor.execute("INSERT INTO Countries(CountryCode, CountryName, Population) VALUES (%s, %s, %s)", (row[16], row[0], int(float(row[17]))))
+            countryCode[row[16]] = row[0]
+        cursor.execute("INSERT INTO RecordedData(CountryCode, Year, CO2Emissions, Population) VALUES (%s, %s, %s, %s)", (row[16], int(row[1]), float(row[2]) * 1000000, int(float(row[17]))))
         db.commit()
 
-'''
+db.close()
