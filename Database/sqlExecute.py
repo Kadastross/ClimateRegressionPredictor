@@ -29,7 +29,13 @@ def delete_simulation_node(tx, simID):
 
 def shared_to_relationship(tx, userA, userB, simID):
     tx.run("MATCH (s:Simulation {SimulationID:$id}) MATCH (u:User {UserID: $user}) CREATE (s)-[:SHARED_TO]->(u)", id=simID, user=userB)
-    print('placeholder')
+
+def find_shared_sims(tx, username):
+    sharedSims = []
+    result = tx.run("MATCH (a:User)-[:WROTE]->(b:Simulation)-[:SHARED_TO]->(c:User {UserID: $user}) RETURN a.UserID AS User, b.Name AS SimName", user=username)
+    for record in result:
+        sharedSims.append("%s (%s)".format(record["SimName"], record["User"]))
+    return sharedSims
 
 def exit_handler():
     connection.close()
@@ -63,6 +69,16 @@ def existsUser(user):
     return records[0][0]
 
 @app.route('/')
+
+@app.route('/findSharedSimulations', methods=['GET', 'POST'])
+def findSharedSimulations():
+    results = request.get_json()
+    sharedSims = []
+    with driver.session() as session:
+        sharedSims = session.read_transaction(find_shared_sims, results["username"])
+
+    print(sharedSims)
+    return sharedSims
 
 @app.route('/shareSimulations', methods=['GET', 'POST'])
 def shareSimulations():
