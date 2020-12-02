@@ -40,8 +40,8 @@ def split_sequence(sequence, n_steps_in, n_steps_out):
 		y.append(seq_y)
 	return array(X), array(y)
 
-def lstm_validation_predictions(start_year, user_input, existing_data):
-    raw_seq = get_raw_sequence()
+
+    
 
 
 def lstm_forecast_predictions(start_year, user_input, existing_data):

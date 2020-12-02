@@ -59,9 +59,6 @@ userID = ""
 #     print(records[0][0])
 #     return str(records[0][0])
 
-<<<<<<< HEAD
-=======
-
 #CHECK IF USER EXISTS:
 def existsUser(user):
     sql_login_query = "SELECT count(*) FROM User WHERE UserID = '%s'" % (user)
@@ -71,7 +68,7 @@ def existsUser(user):
     cursor.close()
     return records[0][0]
 
->>>>>>> 6445103fbfc475d827bde26fa05f1afcabce36c4
+
 @app.route('/')
 
 @app.route('/findSharedSimulations', methods=['GET', 'POST'])
