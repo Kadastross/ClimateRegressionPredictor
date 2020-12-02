@@ -15,6 +15,7 @@ class LineGraph extends React.Component {
     render() {
         var data = this.props.data
         if (Object.keys(data).length != 0) {
+
             var existingData = data['ExistingData']
             var userInput = data['UserInput']
             var linModel = data['LinModel']
