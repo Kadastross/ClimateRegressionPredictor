@@ -161,7 +161,7 @@ class Share extends React.Component {
                 <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
                 <Card border = "danger" style={{width: '25rem'}}>
                     <Card.Body>
-                        <Card.Title>Create a Simulation</Card.Title>
+                        <Card.Title>Share a Simulation</Card.Title>
                         <Card.Text>
                             <Form>
                                 <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.simShare} onClick = {this.getAllSimName} onChange={this.changeSimShare}>
@@ -177,12 +177,12 @@ class Share extends React.Component {
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.share}>Share Simulation</Button>
                                 {this.state.successShare == "false" && 
                                     <div>
-                                        <Card.Text style={{marginTop:"20px"}}>This User Does Not Exist.</Card.Text>
+                                        <Card.Text class="alert alert-danger" style={{marginTop:"20px"}}>This User Does Not Exist.</Card.Text>
                                     </div>
                                 }
                                 {this.state.successShare == "true" && 
                                     <div>
-                                        <Card.Text style={{marginTop:"20px"}}>Simulation Shared Successfully!</Card.Text>
+                                        <Card.Text class="alert alert-success" style={{marginTop:"20px"}}>Simulation Shared Successfully!</Card.Text>
                                     </div>
                                 }
                             </Form>

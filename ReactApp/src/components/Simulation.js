@@ -395,15 +395,23 @@ class Simulation extends React.Component {
             <ScrollableAnchor id="HeatMap">
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             </ScrollableAnchor>
-            <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.map_year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
+
+            <div class="row">
+                <div style={{marginLeft:"20px"}}>
+                <select style ={{marginTop: "20px", marginLeft:"20px", width:"150px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.map_year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
                                         <option>Select Year</option>
                                         {this.state.validMapYears.map(map_year => {
                                             return (
                                                 <option value = {map_year}> {map_year} </option>
                                             )
-                                        })}
+                                })}
             </select>
-            <Button style ={{marginTop:"20px", marginLeft:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
+                </div>
+                <div style={{marginLeft:"20px"}}>
+                    <Button style ={{marginTop:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
+                </div>
+            </div>
+
             <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
             <ScrollableAnchor id="Create">
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
@@ -426,10 +434,10 @@ class Simulation extends React.Component {
                                 </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.create}>Create Simulation</Button>
                                 {this.state.createSimResult === "true" && 
-                                    <Card.Text style={{marginTop:"20px"}}>Simulation Created Successfully</Card.Text>
+                                    <Card.Text class="alert alert-success" style={{marginTop:"20px"}}>Simulation Created Successfully</Card.Text>
                                 }
                                 {this.state.createSimResult === "false" && 
-                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                    <Card.Text class="alert alert-danger" style={{marginTop:"20px"}}>There was an error.</Card.Text>
                                 }
                             </Form>
                         </Card.Text>
@@ -462,10 +470,10 @@ class Simulation extends React.Component {
                                     <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                     <Button style={{marginTop:"20px"}} variant="danger" onClick={this.addNewDataPoint}>Add Data Point</Button>
                                     {this.state.addDataResult === "true" && 
-                                    <Card.Text style={{marginTop:"20px"}}>Data Point Added Successfully</Card.Text>
+                                    <Card.Text class="alert alert-success" style={{marginTop:"20px"}}>Data Point Added Successfully</Card.Text>
                                     }
                                     {this.state.createSimResult === "false" && 
-                                        <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                        <Card.Text class="alert alert-danger" style={{marginTop:"20px"}}>There was an error.</Card.Text>
                                     }
                                 </Form>
                             </Card.Text>
@@ -496,10 +504,10 @@ class Simulation extends React.Component {
                                 <Form.Control type="number" placeholder = "CO2 Emissions" value={this.state.co2} onChange={this.changeCo2}/>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.update}>Update Data Points</Button>
                                 {this.state.updateSimResult === "true" && 
-                                    <Card.Text style={{marginTop:"20px"}}>Data Point Updated Successfully</Card.Text>
+                                    <Card.Text class="alert alert-success" style={{marginTop:"20px"}}>Data Point Updated Successfully</Card.Text>
                                 }
                                 {this.state.createSimResult === "false" && 
-                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                    <Card.Text class="alert alert-danger" style={{marginTop:"20px"}}>There was an error.</Card.Text>
                                 }
                             </Form>
                         </Card.Text>
@@ -520,10 +528,10 @@ class Simulation extends React.Component {
                                     </select>
                                 <Button style={{marginTop:"20px"}} variant="danger" onClick={this.delete}>Delete Simulation</Button>
                                 {this.state.deleteSimResult === "true" && 
-                                    <Card.Text style={{marginTop:"20px"}}>Simulation Deleted Successfully</Card.Text>
+                                    <Card.Text class="alert alert-success" style={{marginTop:"20px"}}>Simulation Deleted Successfully</Card.Text>
                                 }
                                 {this.state.createSimResult === "false" && 
-                                    <Card.Text style={{marginTop:"20px"}}>There was an error.</Card.Text>
+                                    <Card.Text class="alert alert-danger" style={{marginTop:"20px"}}>There was an error.</Card.Text>
                                 }
                             </Form>
                         </Card.Text>
