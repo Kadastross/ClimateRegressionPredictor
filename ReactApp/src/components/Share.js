@@ -153,7 +153,7 @@ class Share extends React.Component {
         console.log(this.state.successViewShare)
         return(
             <div >
-                <h1 className="block-example border-bottom border-dark" style={{marginTop:"20px",marginLeft:"20px" , color:'white'}}> Share Your Simulations</h1>
+                <h2 className="block-example border-bottom border-dark" style={{marginTop:"20px",marginLeft:"20px" , color:'white'}}> Share Your Simulations</h2>
                 <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
                 <Card border = "danger" style={{width: '25rem'}}>
                     <Card.Body>

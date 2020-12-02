@@ -360,19 +360,38 @@ class Simulation extends React.Component {
 
         return (
         <div className="Sim-Background">
+            <nav class="navbar navbar-expand-md navbar-dark bg-danger fixed-top">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#HeatMap">Heat Map</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Create">Create Simulation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Share">Share Simulation</a>
+                </li>
+                </ul>
+            </div>
+            </nav>
             <div class="row">
                 <div class="col-sm-10 col-12">
-                    <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Welcome {this.state.userID} </h1>
+                    <h1 className="block-example border-bottom border-dark" style={{marginLeft:"20px", marginTop:"50px" , color:'white'}}>Welcome {this.state.userID} </h1>
                 </div>
                 <div class="col-sm-2 col-12">
-                    <Button style = {{marginLeft:"50px"}} variant="danger" onClick = {this.logOut}>Log Out</Button>
+                    <Button style = {{marginLeft:"50px", marginTop:"50px"}} variant="danger" onClick = {this.logOut}>Log Out</Button>
                 </div>
             </div>
             <h1 className="block-example border-bottom border-dark" style={{marginTop:"30px", marginLeft:"20px" , color:'white'}}> Modeling Climate Change</h1>
-            
+    
 
-
+            <ScrollableAnchor id="HeatMap">
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
+            </ScrollableAnchor>
             <select style ={{marginTop: "20px", marginLeft:"20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.map_year} onClick={this.getMapYearDropdown}  onChange={this.changeMapYear}>
                                         <option>Select Year</option>
                                         {this.state.validMapYears.map(map_year => {
@@ -383,7 +402,9 @@ class Simulation extends React.Component {
             </select>
             <Button style ={{marginTop:"20px", marginLeft:"20px"}} variant="danger" onClick={this.getMapData}>View Map</Button>
             <HeatMap yr={this.state.map_year} map_data={this.state.mapData}></HeatMap>
+            <ScrollableAnchor id="Create">
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
+            </ScrollableAnchor>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>
                     <Card.Body>
@@ -555,7 +576,9 @@ class Simulation extends React.Component {
                             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>{this.state.userView}Waiting For Graph ...</h2>
                         </div>
                 }
+                <ScrollableAnchor id="Share">
                 <Share />
+                </ScrollableAnchor>
                 <h1 style={{color:"black"}}>xyz</h1>
         </div>
         )
