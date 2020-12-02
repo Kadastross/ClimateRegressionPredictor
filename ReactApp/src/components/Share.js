@@ -22,7 +22,9 @@ class Share extends React.Component {
             simView: "",
             userView: "",
             successShare: "",
-            allSimSharedWithUser: []
+            allSimSharedWithUser: [],
+            displayOnViewSim: "",
+            runData: {}
         }
     }
 
@@ -87,7 +89,8 @@ class Share extends React.Component {
     }
 
     changeSimView = (e) => {
-        this.setState({simView: e.target.value})
+        var temp = e.target.value.split(" ")
+        this.setState({displayOnViewSim: e.target.value, simView: temp[0], userView: temp[1]})
     }
 
     run = () => {
@@ -178,7 +181,7 @@ class Share extends React.Component {
                         <Card.Title>View a Simulation That was Shared To You</Card.Title>
                         <Card.Text>
                             <Form>
-                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.simView} onClick = {this.getAllSimSharedWithYou} onChange={this.changeSimView}>
+                                <select style ={{marginTop: "20px"}} class="form-control" id="exampleFormControlSelect1" value = {this.state.displayOnViewSim} onClick = {this.getAllSimSharedWithYou} onChange={this.changeSimView}>
                                     <option>Select Simulation To View</option>
                                     {this.state.allSimSharedWithUser.map(sim => {
                                             return (
@@ -192,6 +195,9 @@ class Share extends React.Component {
                     </Card.Body>
                 </Card>
                 </CardDeck>
+                <div style = {{marginTop:"30px"}} >
+                    <LineGraph data={this.state.runData}></LineGraph>
+                </div>
             </div>
         )
     }
