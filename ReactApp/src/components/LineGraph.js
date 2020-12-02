@@ -106,6 +106,21 @@ class LineGraph extends React.Component {
                     // size={({ active }) => active ? 2 : 1}
                 />)}
                 {Object.keys(data).length != 0 && (
+                <VictoryLine
+                    data={expModel} 
+                    style={{
+                        data: {
+                            stroke: "turquoise"
+                        }
+                    }}
+                    x='Year' 
+                    y='CO2Emissions'
+                    // labels={({ datum }) => [`x: ${datum.x}`, `y: ${datum.y}`]}
+                    // labels={({ datum }) => [`Year: ${datum.Year}`, `CO2: ${Math.round(datum.Emissions/1000000)}M`]}
+                    // labelComponent={<VictoryTooltip style={{fontSize: '8px'}}/>}
+                    // size={({ active }) => active ? 2 : 1}
+                />)}
+                {Object.keys(data).length != 0 && (
                 <VictoryAxis
                     label="Year"
                     tickCount={30}

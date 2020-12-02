@@ -124,7 +124,7 @@ def runSimulation():
     country = records[0][1]
     userInput, existingData = [], []
     for i in range(len(records)):
-        userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]})
+        userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]*1000000})
     # print(userInput)
     sql_run_Query = "SELECT Year, CO2Emissions FROM RecordedData r JOIN Countries c ON r.CountryCode=c.CountryCode WHERE CountryName = %s"
     cursor.execute(sql_run_Query, (country,))
