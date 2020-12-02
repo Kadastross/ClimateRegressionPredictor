@@ -8,13 +8,13 @@ import tensorflow
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379669"
-dbPassword = "LGGlMtRGdY"
+dbUser = "sql9379892"
+dbPassword = "83c7iMZZUu"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379669",
+                                    database = "sql9379892",
                                     auth_plugin = 'mysql_native_password')
 
 driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "KtTJdqBc6jzeNze4"))
@@ -217,6 +217,8 @@ def runSimulation():
     expModel = expReg(startYear, userInput, existingData)
 
     lstmModel = lstm.lstm_forecast_predictions(startYear, userInput, existingData)
+
+    print(lstmModel)
 
     retval = {}
     retval['UserInput'] = userInput
