@@ -21,8 +21,8 @@ driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:
 def create_user_node(tx, name):
     tx.run("CREATE (a:`User` { `UserID`: $user }) RETURN a", user=name)
 
-def create_simulation_node(tx, name, simID):
-    tx.run("MATCH (a:User {UserID: $user}) CREATE (a)-[:WROTE]->(b:Simulation {SimulationID: $id})", user=name, id=simID)
+def create_simulation_node(tx, name, simID, simulationName):
+    tx.run("MATCH (a:User {UserID: $user}) CREATE (a)-[:WROTE]->(b:Simulation {SimulationID: $id, Name: $simName})", user=name, id=simID, simName=simulationName)
 
 def delete_simulation_node(tx, simID):
     tx.run("MATCH (a:Simulation {SimulationID:$id}) DETACH DELETE a", id=simID)
@@ -74,7 +74,7 @@ def createSimulation():
     simID = response[0][0]
 
     with driver.session() as session:
-        session.write_transaction(create_simulation_node, results["username"], simID)
+        session.write_transaction(create_simulation_node, results["username"], simID, results["simName"])
 
     return "s"
 
