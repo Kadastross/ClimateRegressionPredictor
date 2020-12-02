@@ -16,7 +16,7 @@ class App extends React.Component {
         <div>
           <hr />
           <Route exact path={ROUTES.ROOT} component={LogIn}/>
-          <Route exact path={ROUTES.SIGN_UP} component={SignUp} />
+          <Route path={ROUTES.SIGN_UP} component={SignUp} />
           <PrivateRoute exact path={ROUTES.SIMULATIONS} component={Simulation} />
         </div>
   </BrowserRouter>

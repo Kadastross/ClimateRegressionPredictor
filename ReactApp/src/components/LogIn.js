@@ -22,6 +22,10 @@ class LogIn extends React.Component {
         }
     }
 
+    // componentDidMount = () => {
+    //     ls.set("validLogin", false);
+    // }
+
     changeUsername =(e) => {
         this.setState({username: e.target.value })
         ls.set('username', e.target.value)

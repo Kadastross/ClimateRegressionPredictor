@@ -7,13 +7,13 @@ from basicRegs import linReg, expReg
 
 # dbIP = "localhost"
 dbIP = "sql9.freemysqlhosting.net"
-dbUser = "sql9379236"
-dbPassword = "Ax3afA2tkU"
+dbUser = "sql9379669"
+dbPassword = "LGGlMtRGdY"
 
 connection = mysql.connector.connect(host = dbIP,
                                     user = dbUser,
                                     password = dbPassword,
-                                    database = "sql9379236",
+                                    database = "sql9379669",
                                     auth_plugin = 'mysql_native_password')
 
 driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "KtTJdqBc6jzeNze4"))
