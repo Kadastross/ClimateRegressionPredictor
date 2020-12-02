@@ -14,12 +14,12 @@ const geoUrl =
   "https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-110m.json";
 
 const colorScale = scaleLinear()
-  .domain([0, 10000000000])
+  .domain([0, 25])
   .range(["#ffcccc", "#ff0000"]);
   
   const HeatMap = (props) => {
     //super(props);
-    console.log(props.yr);
+    //console.log(props.yr);
     //const [data, setData] = useState([]);
     useEffect(() => {
         ReactTooltip.rebuild();
@@ -32,12 +32,12 @@ const colorScale = scaleLinear()
     // }, []);
 
     var data = props.map_data;
-    console.log(props.map_data);
+    //console.log(props.map_data);
     var info = "hi";
 
     return (
         <div>
-            <h4 style={{marginTop:"15px", marginLeft:"20px", color:"white"}}>Click on the countries to see their total CO2 emissions in millions of tons</h4>
+            <h4 style={{marginTop:"15px", marginLeft:"20px", color:"white"}}>Click on the countries to see their CO2 emissions per capita</h4>
             {/* <ReactTooltip />    */}
     <h4 style={{marginLeft:"20px",color:"white"}}> Year {props.yr} </h4>
       <ComposableMap
@@ -76,8 +76,7 @@ const colorScale = scaleLinear()
                       }}
                     geography={geo}
                     
-                    
-                    fill={d ? colorScale(d[1]) : "#F5F4F6"}
+                    fill={d ? colorScale(d[4]) : "#F5F4F6"}
                     onClick={() => {
                         info = d ? d[2] : "Not Recorded";
                         alert(d ? info + ": " + Number(d[1] / 1000000).toFixed(2) + " million Tons of CO2 in total" + " for population of " + Number(d[3]) + "\n \n" + Number(d[4]).toFixed(2) + " Tons of CO2 per capita": "Not Recorded");
