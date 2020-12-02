@@ -116,7 +116,7 @@ class Simulation extends React.Component {
 
     getMapYearDropdown = () => {
         var validYears = []
-        for (let i = 1751; i < 2018; i++) {
+        for (let i = 1800; i <= 2018; i++) {
             validYears.push(i)
         }
         this.setState({validMapYears: validYears})
