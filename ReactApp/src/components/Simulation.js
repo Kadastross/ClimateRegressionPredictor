@@ -26,6 +26,7 @@ class Simulation extends React.Component {
             yearList: [],
             simIDFound: "",
             viewData: [],
+            runData: {},
             validData: "false",
             userID: "",
             createSimResult: "",
@@ -247,7 +248,8 @@ class Simulation extends React.Component {
             if (data === "fail") {
                 this.setState({simIDFound:"false"})
             } else {
-                this.setState({viewData: data})
+                // ls.set('modelData', data)
+                this.setState({runData: data})
             }
         })
         .catch((error) => {
@@ -297,7 +299,7 @@ class Simulation extends React.Component {
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Heat Map</h2>
             <HeatMap></HeatMap>
             <h2 className="block-example border-bottom border-dark" style={{marginTop: "50px", marginLeft:"20px" , color:'white'}}>Co2 Emissions Graph</h2>
-            <LineGraph></LineGraph>
+            <LineGraph data={this.state.runData}></LineGraph>
             <h2 className="block-example border-bottom border-dark" style={{marginLeft:"20px" , color:'white'}}>Create a Predictive Climate Simulation</h2>
             <CardDeck style={{marginTop:"20px", marginLeft:"10px", marginRight:"10px"}}>
             <Card border = "danger" style={{width: '25rem'}}>

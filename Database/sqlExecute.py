@@ -138,28 +138,31 @@ def runSimulation():
     cursor = connection.cursor()
     cursor.execute(sql_run_Query, (results["simName"], results["username"]))
     records = cursor.fetchall()
-    cursor.close()
     if (len(records) == 0):
         return "fail"
-    print(records)
-    startYear = 0
+    # print(records)
+    startYear = float('inf')
     country = records[0][1]
     userInput, existingData = [], []
     for i in range(len(records)):
         userInput.append({"Year": records[i][2], "CO2Emissions": records[i][3]})
-    print(userInput)
-    # sql_run_Query = "SELECT Year, CO2Emissions FROM Table WHERE Country = %s"
-    # cursor.execute(sql_run_Query, (country))
-    # records = cursor.fetchall()
-    # for i in range(len(records)):
-    #     existingData.append({"Year": records[i][0], "CO2Emissions": records[i][1]})
-    # linModel = linReg(startYear, userInput, existingData)
-    # expModel = expReg(startYear, userInput, existingData)
+    # print(userInput)
+    sql_run_Query = "SELECT Year, CO2Emissions FROM RecordedData r JOIN Countries c ON r.CountryCode=c.CountryCode WHERE CountryName = %s"
+    cursor.execute(sql_run_Query, (country,))
+    records = cursor.fetchall()
+    cursor.close()
+    for i in range(len(records)):
+        existingData.append({"Year": records[i][0], "CO2Emissions": records[i][1]})
+        startYear = min(startYear, records[i][0])
+    # print(existingData)
+    linModel = linReg(startYear, userInput, existingData)
+    expModel = expReg(startYear, userInput, existingData)
     retval = {}
-    # retval['Country'] = country
-    # retval['ExistingData'] = existingData
-    # retval['LinModel'] = linModeldd
-    # retval['ExpModel'] = expModel
+    retval['UserInput'] = userInput
+    retval['Country'] = country
+    retval['ExistingData'] = existingData
+    retval['LinModel'] = linModel
+    retval['ExpModel'] = expModel
     return jsonify(retval);
 
 #GET ALL SIMULATION NAMES THE USER CREATED.
