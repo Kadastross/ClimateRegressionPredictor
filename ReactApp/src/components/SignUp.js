@@ -80,6 +80,9 @@ class SignUp extends React.Component {
                                         <Button style={{marginTop:"20px"}} variant="danger" onClick={this.createUser}>Sign Up</Button>
                                     </div>
                                 }
+                                <Form.Text style={{marginTop:"20px"}} >
+                                    <Link to={ROUTES.ROOT}> Already Have an Account. Log In </Link>
+                                </Form.Text>
                             </Form>
                         </Card.Text>
                     </Card.Body>
