@@ -36,7 +36,7 @@ def find_shared_sims(tx, username):
     result = tx.run("MATCH (a:User)-[:WROTE]->(b:Simulation)-[:SHARED_TO]->(c:User {UserID: $user}) RETURN a.UserID AS User, b.Name AS SimName", user=username)
     for record in result:
         sharedSims.append("{} {}".format(record["SimName"], record["User"]))
-    return jsonify(sharedSims)
+    return sharedSims
 
 def exit_handler():
     connection.close()
@@ -78,8 +78,7 @@ def findSharedSimulations():
     with driver.session() as session:
         sharedSims = session.read_transaction(find_shared_sims, results["username"])
 
-    print(sharedSims)
-    return sharedSims
+    return jsonify(sharedSims)
 
 @app.route('/shareSimulations', methods=['GET', 'POST'])
 def shareSimulations():
@@ -94,6 +93,13 @@ def shareSimulations():
     response = cursor.fetchall()
     cursor.close()
     simID = response[0][0]
+    sharedSims = []
+    with driver.session() as session:
+        sharedSims = session.read_transaction(find_shared_sims, results["userShare"])
+
+    for sharedSim in sharedSims:
+        if results["simShare"] in sharedSim:
+            return '1'
 
     with driver.session() as session:
         session.write_transaction(shared_to_relationship, results["username"], results["userShare"], simID)
