@@ -219,6 +219,8 @@ def runSimulation():
     lstmModel = lstm.lstm_forecast_predictions(startYear, userInput, existingData)
     print(lstmModel)
 
+    print(lstmModel)
+
     retval = {}
     retval['UserInput'] = userInput
     retval['Country'] = country
