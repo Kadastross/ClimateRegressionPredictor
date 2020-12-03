@@ -123,9 +123,11 @@ class Share extends React.Component {
                 // ls.set('modelData', data)
                 this.setState({runData: data, successViewShare: "true"})
             }
+            console.log("REACHEd")
         })
         .catch((error) => {
             console.log(error)
+            console.log("REACHED ERROR")
             this.setState({successViewShare: "false"});
             setTimeout(function(){
                 this.setState({successViewShare: "x"});
