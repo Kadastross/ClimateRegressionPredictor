@@ -17,7 +17,7 @@ connection = mysql.connector.connect(host = dbIP,
                                     database = "sql9379892",
                                     auth_plugin = 'mysql_native_password')
 
-driver = neo4j.GraphDatabase.driver('bolt://35-238-45-189.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "KtTJdqBc6jzeNze4"))
+driver = neo4j.GraphDatabase.driver('bolt://35-222-170-129.gcp-neo4j-sandbox.com:7687',auth=("neo4j", "aY1KJHT6vLG67oLx"))
 
 def create_user_node(tx, name):
     tx.run("CREATE (a:`User` { `UserID`: $user }) RETURN a", user=name)
